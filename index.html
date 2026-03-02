@@ -229,7 +229,64 @@ tr:hover td{background:var(--surface2)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:60px;color:var(--text-muted);font-size:13px}
 
-@media(max-width:1200px){.charts-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.phases-grid{grid-template-columns:repeat(2,1fr)}.settings-grid{grid-template-columns:1fr}.module-meters{grid-template-columns:1fr}}
+/* PROGRESS GLOBAL CARD */
+.progress-global-card{background:linear-gradient(135deg,#5a0899 0%,#820ad1 55%,#a020d0 100%);border-radius:var(--radius);padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;gap:36px;flex-wrap:wrap;box-shadow:0 8px 36px rgba(130,10,209,.3);position:relative;overflow:hidden}
+.progress-global-card::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.05)}
+.pg-left{flex:1;min-width:220px}
+.pg-label{font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.9px;margin-bottom:8px}
+.pg-value{font-size:52px;font-weight:800;color:#fff;line-height:1;margin-bottom:4px}
+.pg-sub{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:14px}
+.pg-bar-wrap{display:flex;align-items:center;gap:12px}
+.pg-bar{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.2);overflow:hidden}
+.pg-fill{height:100%;border-radius:4px;background:var(--gold);transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.pg-pct{font-size:14px;font-weight:800;color:var(--gold);min-width:42px}
+.pg-stats{display:flex;flex-direction:column;gap:12px;min-width:160px}
+.pg-stat{background:rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;backdrop-filter:blur(4px)}
+.pg-stat-val{font-size:22px;font-weight:800;color:#fff;line-height:1}
+.pg-stat-label{font-size:10px;color:rgba(255,255,255,.6);margin-top:2px}
+.pg-ring-wrap{position:relative;width:140px;height:140px;flex-shrink:0}
+.pg-ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:22px;font-weight:800;color:#fff;text-align:center}
+
+/* PROPERTY PROGRESS CARDS GRID */
+.prop-progress-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:24px}
+.pp-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;transition:all .25s}
+.pp-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.pp-header{padding:16px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.pp-name{font-size:14px;font-weight:800;line-height:1.2}
+.pp-city{font-size:11px;color:var(--text-muted);margin-top:2px}
+.pp-phase-badge{flex-shrink:0}
+.pp-pct-big{font-size:28px;font-weight:800;text-align:right;line-height:1}
+.pp-body{padding:14px 18px}
+.pp-modules{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.pp-mod-row{display:grid;grid-template-columns:22px 1fr auto auto;align-items:center;gap:8px}
+.pp-mod-icon{font-size:14px;text-align:center}
+.pp-mod-name{font-size:11px;font-weight:600;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-mod-bar-wrap{display:flex;align-items:center;gap:6px;grid-column:2/5;margin-top:-4px;padding-left:30px}
+.pp-mod-bar{flex:1;height:5px;border-radius:3px;background:var(--surface2);overflow:hidden}
+.pp-mod-fill{height:100%;border-radius:3px;transition:width .8s ease}
+.pp-mod-pct{font-size:10px;font-weight:700;min-width:30px;text-align:right}
+.pp-mod-val{font-size:10px;color:var(--text-muted);white-space:nowrap}
+.pp-footer{padding:10px 18px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pp-days{font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
+.pp-overall-bar{width:100%;height:6px;border-radius:3px;background:var(--surface2);overflow:hidden;margin:8px 0 4px}
+.pp-overall-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.pp-edit-btn{padding:4px 10px;border-radius:7px;background:rgba(130,10,209,.08);color:var(--domo);border:1px solid rgba(130,10,209,.2);font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
+.pp-edit-btn:hover{background:var(--domo);color:#fff}
+
+/* MODULE PROGRESS MODAL */
+.mod-progress-grid{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.mp-row{display:grid;grid-template-columns:32px 1fr 80px 50px;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border)}
+.mp-icon{font-size:18px;text-align:center}
+.mp-info{min-width:0}
+.mp-name{font-size:12px;font-weight:700}
+.mp-target{font-size:10px;color:var(--text-muted)}
+.mp-input{padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:var(--text);outline:none;text-align:center;width:100%;transition:border .2s}
+.mp-input:focus{border-color:var(--domo)}
+.mp-active{display:flex;align-items:center;justify-content:center}
+.mp-active input[type=checkbox]{width:16px;height:16px;accent-color:var(--domo);cursor:pointer}
+
+@media(max-width:900px){.prop-progress-grid{grid-template-columns:1fr}.progress-global-card{flex-direction:column;gap:20px}.pg-ring-wrap{align-self:center}}
+
 @media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0}.kpi-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.wc-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -250,6 +307,7 @@ tr:hover td{background:var(--surface2)}
     <div class="nav-item active" onclick="showSection('dashboard',this)"><span class="nav-icon">📊</span> <span data-i="nav_dashboard">Dashboard</span></div>
     <div class="nav-item" onclick="showSection('properties',this)"><span class="nav-icon">🏢</span> <span data-i="nav_props">Propiedades</span></div>
     <div class="nav-item" onclick="showSection('modules',this)"><span class="nav-icon">🧩</span> <span data-i="nav_modules">Módulos</span></div>
+    <div class="nav-item" onclick="showSection('progress',this)"><span class="nav-icon">🎯</span> <span data-i="nav_progress">Avances</span></div>
     <div class="nav-item" onclick="showSection('charts',this)"><span class="nav-icon">📈</span> <span data-i="nav_charts">Gráficas</span></div>
     <div class="nav-item" onclick="showSection('settings',this)"><span class="nav-icon">⚙️</span> <span data-i="nav_settings">Configuración</span></div>
   </nav>
@@ -460,6 +518,57 @@ tr:hover td{background:var(--surface2)}
       </div>
     </div>
 
+    <!-- PROGRESS -->
+    <div id="sec-progress" style="display:none" class="fade-in">
+
+      <!-- PONDERADO GLOBAL -->
+      <div class="progress-global-card">
+        <div class="pg-left">
+          <div class="pg-label" data-i="pg_label">Avance Ponderado Global</div>
+          <div class="pg-value" id="pgValue">0%</div>
+          <div class="pg-sub" id="pgSub">0 propiedades · 0 módulos activos</div>
+          <div class="pg-bar-wrap">
+            <div class="pg-bar"><div class="pg-fill" id="pgFill" style="width:0%"></div></div>
+            <span class="pg-pct" id="pgPct">0%</span>
+          </div>
+        </div>
+        <div class="pg-stats" id="pgStats"></div>
+        <div class="pg-ring-wrap">
+          <canvas id="pgRing" width="140" height="140"></canvas>
+          <div class="pg-ring-center" id="pgRingCenter">0%</div>
+        </div>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+        <div class="section-title" data-i="sec_indiv_progress">Avance Individual por Propiedad</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="filter-tabs">
+            <div class="filter-tab active" onclick="setPFilter('all',this)" data-i="f_all">Todas</div>
+            <div class="filter-tab" onclick="setPFilter('implementation',this)" data-i="f_impl">Implementación</div>
+            <div class="filter-tab" onclick="setPFilter('pilot',this)" data-i="f_pilot">Piloto</div>
+            <div class="filter-tab" onclick="setPFilter('support',this)" data-i="f_support">Soporte</div>
+            <div class="filter-tab" onclick="setPFilter('done',this)" data-i="f_done">Completado</div>
+          </div>
+          <select class="lang-sel" id="progressSort" onchange="renderProgressSection()" style="font-size:12px">
+            <option value="pct_desc" data-i="sort_pct_desc">Mayor avance</option>
+            <option value="pct_asc" data-i="sort_pct_asc">Menor avance</option>
+            <option value="name" data-i="sort_name">Nombre</option>
+            <option value="phase" data-i="sort_phase">Fase</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- PROPERTY PROGRESS CARDS -->
+      <div class="prop-progress-grid" id="propProgressGrid"></div>
+
+      <!-- MODULE PROGRESS CHART -->
+      <div class="chart-card" style="margin-top:8px">
+        <div class="chart-header"><div class="section-title" data-i="chart_mod_prog">Avance por Módulo — Todas las Propiedades</div></div>
+        <div class="chart-body" style="height:300px"><canvas id="chartModProgress"></canvas></div>
+      </div>
+    </div>
+
     <!-- SETTINGS -->
     <div id="sec-settings" style="display:none" class="fade-in">
       <div class="settings-grid">
@@ -577,8 +686,9 @@ tr:hover td{background:var(--surface2)}
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label" data-i="fld_modules">Módulos Activos</label>
-        <div class="modules-check-grid" id="modulesChecks"></div>
+        <label class="form-label" data-i="fld_modules">Módulos Activos y Avance Individual</label>
+        <div class="form-hint" style="margin-bottom:8px" data-i="fld_modules_hint">Activa el módulo y define su porcentaje de avance (0–100%)</div>
+        <div class="mod-progress-grid" id="modulesChecks"></div>
       </div>
       <div class="form-group">
         <label class="form-label" data-i="fld_notes">Notas</label>
@@ -617,7 +727,7 @@ const PHASES = {
 // ══════ TRANSLATIONS ══════
 const T = {
   es:{
-    nav_dashboard:'Dashboard',nav_props:'Propiedades',nav_modules:'Módulos',nav_charts:'Gráficas',nav_settings:'Configuración',
+    nav_dashboard:'Dashboard',nav_props:'Propiedades',nav_modules:'Módulos',nav_charts:'Gráficas',nav_settings:'Configuración',nav_progress:'Avances',
     topbar_title:'Panel de',topbar_impl:'Implementación',
     no_conn:'Sin conexión',realtime:'Tiempo Real',
     good_morning:'Buenos días',good_afternoon:'Buenas tardes',good_evening:'Buenas noches',
@@ -627,6 +737,9 @@ const T = {
     kpi_total:'Total Propiedades',kpi_total_sub:'En plataforma',kpi_impl:'En Implementación',kpi_pilot:'Piloto',kpi_support:'Soporte Continuo',
     wc_title:'Esta semana vs semana pasada',
     sec_phases:'Progreso por Fase',sec_mod_usage:'Uso de Módulos por Propiedad',
+    pg_label:'Avance Ponderado Global',sec_indiv_progress:'Avance Individual por Propiedad',
+    sort_pct_desc:'Mayor avance',sort_pct_asc:'Menor avance',sort_name:'Nombre',sort_phase:'Fase',
+    chart_mod_prog:'Avance por Módulo — Todas las Propiedades',
     chart_phase:'Propiedades por Fase',chart_modules:'Adopción de Módulos',chart_props:'Progreso por Propiedad',
     chart_mod_bar:'Adopción por Módulo (% vs Meta)',chart_mod_detail:'Detalle por Módulo y Fase',
     tbl_mod_title:'Módulos vs Meta (sobre 80% de aptos)',
@@ -642,7 +755,7 @@ const T = {
     set_conn:'Conexión Supabase',set_status:'Estado',
     fld_name:'Nombre *',fld_city:'Ciudad',fld_phase:'Fase *',fld_days:'Días en Fase',
     fld_units:'Total Unidades',fld_units_hint:'Se usa para calcular metas',fld_entry_date:'Fecha de Entrada',
-    fld_modules:'Módulos Activos',fld_notes:'Notas',
+    fld_modules:'Módulos Activos y Avance Individual',fld_modules_hint:'Activa el módulo y define su porcentaje de avance (0–100%)',fld_notes:'Notas',
     f_all:'Todas',f_impl:'Implementación',f_pilot:'Piloto',f_support:'Soporte',f_done:'Completado',
     toast_connected:'✅ Conectado a Supabase',toast_error_conn:'Error de conexión',toast_saved:'✅ Guardado',toast_deleted:'🗑️ Eliminado',toast_refreshed:'↻ Actualizado',
     empty_props:'Sin propiedades. ¡Agrega la primera!',ph_impl:'En Implementación',ph_pilot:'Piloto',ph_support:'Soporte Continuo',ph_done:'Completado',
@@ -650,7 +763,7 @@ const T = {
     demo_mode:'🧪 Modo demo activo'
   },
   en:{
-    nav_dashboard:'Dashboard',nav_props:'Properties',nav_modules:'Modules',nav_charts:'Charts',nav_settings:'Settings',
+    nav_dashboard:'Dashboard',nav_props:'Properties',nav_modules:'Modules',nav_charts:'Charts',nav_settings:'Settings',nav_progress:'Progress',
     topbar_title:'Implementation',topbar_impl:'Panel',
     no_conn:'Offline',realtime:'Live',
     good_morning:'Good morning',good_afternoon:'Good afternoon',good_evening:'Good evening',
@@ -675,7 +788,7 @@ const T = {
     set_conn:'Supabase Connection',set_status:'Status',
     fld_name:'Name *',fld_city:'City',fld_phase:'Phase *',fld_days:'Days in Phase',
     fld_units:'Total Units',fld_units_hint:'Used to calculate targets',fld_entry_date:'Entry Date',
-    fld_modules:'Active Modules',fld_notes:'Notes',
+    fld_modules:'Active Modules & Individual Progress',fld_modules_hint:'Enable the module and set its progress percentage (0–100%)',fld_notes:'Notes',
     f_all:'All',f_impl:'Implementation',f_pilot:'Pilot',f_support:'Support',f_done:'Done',
     toast_connected:'✅ Connected to Supabase',toast_error_conn:'Connection error',toast_saved:'✅ Saved',toast_deleted:'🗑️ Deleted',toast_refreshed:'↻ Refreshed',
     empty_props:'No properties. Add the first one!',ph_impl:'In Implementation',ph_pilot:'Pilot',ph_support:'Ongoing Support',ph_done:'Done',
@@ -683,7 +796,7 @@ const T = {
     demo_mode:'🧪 Demo mode active'
   },
   pt:{
-    nav_dashboard:'Painel',nav_props:'Propriedades',nav_modules:'Módulos',nav_charts:'Gráficos',nav_settings:'Configurações',
+    nav_dashboard:'Painel',nav_props:'Propriedades',nav_modules:'Módulos',nav_charts:'Gráficos',nav_settings:'Configurações',nav_progress:'Avanços',
     topbar_title:'Painel de',topbar_impl:'Implementação',
     no_conn:'Sem conexão',realtime:'Tempo Real',
     good_morning:'Bom dia',good_afternoon:'Boa tarde',good_evening:'Boa noite',
@@ -708,7 +821,7 @@ const T = {
     set_conn:'Conexão Supabase',set_status:'Status',
     fld_name:'Nome *',fld_city:'Cidade',fld_phase:'Fase *',fld_days:'Dias na Fase',
     fld_units:'Total de Unidades',fld_units_hint:'Usado para calcular metas',fld_entry_date:'Data de Entrada',
-    fld_modules:'Módulos Ativos',fld_notes:'Notas',
+    fld_modules:'Módulos Ativos e Avanço Individual',fld_modules_hint:'Ative o módulo e defina seu percentual de avanço (0–100%)',fld_notes:'Notas',
     f_all:'Todas',f_impl:'Implementação',f_pilot:'Piloto',f_support:'Suporte',f_done:'Concluído',
     toast_connected:'✅ Conectado ao Supabase',toast_error_conn:'Erro de conexão',toast_saved:'✅ Salvo',toast_deleted:'🗑️ Excluído',toast_refreshed:'↻ Atualizado',
     empty_props:'Sem propriedades. Adicione a primeira!',ph_impl:'Em Implementação',ph_pilot:'Piloto',ph_support:'Suporte Contínuo',ph_done:'Concluído',
@@ -716,7 +829,7 @@ const T = {
     demo_mode:'🧪 Modo demo ativo'
   },
   ja:{
-    nav_dashboard:'ダッシュボード',nav_props:'物件',nav_modules:'モジュール',nav_charts:'グラフ',nav_settings:'設定',
+    nav_dashboard:'ダッシュボード',nav_props:'物件',nav_modules:'モジュール',nav_charts:'グラフ',nav_settings:'設定',nav_progress:'進捗',
     topbar_title:'実装',topbar_impl:'パネル',
     no_conn:'オフライン',realtime:'リアルタイム',
     good_morning:'おはようございます',good_afternoon:'こんにちは',good_evening:'こんばんは',
@@ -741,7 +854,7 @@ const T = {
     set_conn:'Supabase接続',set_status:'ステータス',
     fld_name:'名前 *',fld_city:'都市',fld_phase:'フェーズ *',fld_days:'フェーズ日数',
     fld_units:'総ユニット数',fld_units_hint:'目標計算に使用',fld_entry_date:'登録日',
-    fld_modules:'アクティブモジュール',fld_notes:'メモ',
+    fld_modules:'アクティブモジュールと個別進捗',fld_modules_hint:'モジュールを有効にして進捗率（0〜100%）を設定',fld_notes:'メモ',
     f_all:'すべて',f_impl:'実装中',f_pilot:'パイロット',f_support:'サポート',f_done:'完了',
     toast_connected:'✅ Supabaseに接続しました',toast_error_conn:'接続エラー',toast_saved:'✅ 保存しました',toast_deleted:'🗑️ 削除しました',toast_refreshed:'↻ 更新しました',
     empty_props:'物件がありません。最初の物件を追加してください！',ph_impl:'実装中',ph_pilot:'パイロット',ph_support:'継続サポート',ph_done:'完了',
@@ -770,6 +883,7 @@ let state = {
   weekData: {current:{}, previous:{}},
   lastUpdated: null
 };
+let progressFilter = 'all';
 
 function t(key) { return (T[lang] && T[lang][key]) || (T['es'][key]) || key; }
 
@@ -778,12 +892,12 @@ function useDemoData() {
   isConnected = true;
   setRealtimeBadge(false);
   state.properties = [
-    {id:'1',name:'Torres del Parque',city:'Bogotá',phase:'implementation',days:45,units:120,modules:['acceso','muro','alertas'],notes:'Iniciando fase de capacitación',entry_date:'2024-11-01'},
-    {id:'2',name:'Conjunto Los Andes',city:'Medellín',phase:'pilot',days:30,units:85,modules:['acceso','muro','solicitudes','zonas'],notes:'Piloto exitoso hasta ahora',entry_date:'2024-10-15'},
-    {id:'3',name:'Residencias Bolívar',city:'Cali',phase:'support',days:180,units:200,modules:['acceso','muro','alertas','solicitudes','zonas','documentos','financiero'],notes:'Consolidado',entry_date:'2024-05-01'},
-    {id:'4',name:'Park Reservado',city:'Barranquilla',phase:'done',days:365,units:60,modules:['acceso','muro','alertas','solicitudes','zonas','documentos','financiero','votaciones'],notes:'Implementación completa',entry_date:'2024-01-01'},
-    {id:'5',name:'Ciudad Verde',city:'Pereira',phase:'implementation',days:15,units:75,modules:['acceso'],notes:'Inicio reciente',entry_date:'2024-12-15'},
-    {id:'6',name:'Altos del Prado',city:'Bucaramanga',phase:'pilot',days:22,units:95,modules:['acceso','muro','alertas','solicitudes'],notes:'Buen avance',entry_date:'2024-12-01'}
+    {id:'1',name:'Torres del Parque',city:'Bogotá',phase:'implementation',days:45,units:120,modules:['acceso','muro','alertas'],module_progress:{acceso:65,muro:40,alertas:80},notes:'Iniciando fase de capacitación',entry_date:'2024-11-01'},
+    {id:'2',name:'Conjunto Los Andes',city:'Medellín',phase:'pilot',days:30,units:85,modules:['acceso','muro','solicitudes','zonas'],module_progress:{acceso:90,muro:75,solicitudes:50,zonas:30},notes:'Piloto exitoso hasta ahora',entry_date:'2024-10-15'},
+    {id:'3',name:'Residencias Bolívar',city:'Cali',phase:'support',days:180,units:200,modules:['acceso','muro','alertas','solicitudes','zonas','documentos','financiero'],module_progress:{acceso:100,muro:95,alertas:85,solicitudes:70,zonas:60,documentos:80,financiero:45},notes:'Consolidado',entry_date:'2024-05-01'},
+    {id:'4',name:'Park Reservado',city:'Barranquilla',phase:'done',days:365,units:60,modules:['acceso','muro','alertas','solicitudes','zonas','documentos','financiero','votaciones'],module_progress:{acceso:100,muro:100,alertas:100,solicitudes:100,zonas:100,documentos:100,financiero:100,votaciones:100},notes:'Implementación completa',entry_date:'2024-01-01'},
+    {id:'5',name:'Ciudad Verde',city:'Pereira',phase:'implementation',days:15,units:75,modules:['acceso'],module_progress:{acceso:25},notes:'Inicio reciente',entry_date:'2024-12-15'},
+    {id:'6',name:'Altos del Prado',city:'Bucaramanga',phase:'pilot',days:22,units:95,modules:['acceso','muro','alertas','solicitudes'],module_progress:{acceso:80,muro:60,alertas:55,solicitudes:35},notes:'Buen avance',entry_date:'2024-12-01'}
   ];
   state.weekData = {
     current:  {alertas:4,  solicitudes:28, muro:9,  acceso:12},
@@ -817,6 +931,7 @@ function renderSection(id) {
   if (id==='dashboard')   { renderKPIs(); renderWeekCompare(); renderPhases(); renderDashCharts(); }
   if (id==='properties')  renderPropertiesTable();
   if (id==='modules')     renderModulesSection();
+  if (id==='progress')    renderProgressSection();
   if (id==='charts')      renderChartsPage();
   if (id==='settings')    renderSettings();
 }
@@ -864,6 +979,7 @@ async function fetchAllData() {
     state.properties = (props||[]).map(p => ({
       id:p.id, name:p.name||'', city:p.city||'', phase:p.phase||'implementation',
       days:p.days_elapsed||0, units:p.units||0, modules:Array.isArray(p.active_modules)?p.active_modules:[],
+      module_progress: (p.module_progress && typeof p.module_progress==='object') ? p.module_progress : {},
       notes:p.notes||'', entry_date:p.entry_date||''
     }));
     // Fetch week activity if table exists
@@ -890,7 +1006,8 @@ async function insertSupabase(prop) {
   if (!sb) return;
   const {error} = await sb.from('properties').insert({
     name:prop.name, city:prop.city, phase:prop.phase, days_elapsed:prop.days,
-    units:prop.units, active_modules:prop.modules, notes:prop.notes, entry_date:prop.entry_date
+    units:prop.units, active_modules:prop.modules, notes:prop.notes, entry_date:prop.entry_date,
+    module_progress:prop.module_progress
   });
   if (error) showToast('Error: '+error.message,'error');
 }
@@ -899,7 +1016,8 @@ async function updateSupabase(id, prop) {
   if (!sb) return;
   const {error} = await sb.from('properties').update({
     name:prop.name, city:prop.city, phase:prop.phase, days_elapsed:prop.days,
-    units:prop.units, active_modules:prop.modules, notes:prop.notes, entry_date:prop.entry_date
+    units:prop.units, active_modules:prop.modules, notes:prop.notes, entry_date:prop.entry_date,
+    module_progress:prop.module_progress
   }).eq('id',id);
   if (error) showToast('Error: '+error.message,'error');
 }
@@ -1151,13 +1269,13 @@ function renderModuleCharts() {
 
 // ══════ MODAL ══════
 function openAddModal() {
-  el('modalTitle').textContent=t('btn_add').replace('+ ','');
+  el('modalTitle').textContent = lang==='es'?'Agregar Propiedad':lang==='en'?'Add Property':lang==='pt'?'Adicionar Propriedade':'物件を追加';
   el('editPropId').value='';
   el('fName').value=''; el('fCity').value=''; el('fPhase').value='implementation';
   el('fDays').value='0'; el('fUnits').value='50';
   el('fEntryDate').value=new Date().toISOString().split('T')[0];
   el('fNotes').value='';
-  buildModuleChecks([]);
+  buildModuleChecks([], {});
   el('propModal').style.display='flex';
 }
 
@@ -1169,23 +1287,45 @@ function openEditModal(id) {
   el('fPhase').value=p.phase||'implementation'; el('fDays').value=p.days||0;
   el('fUnits').value=p.units||0; el('fEntryDate').value=p.entry_date||'';
   el('fNotes').value=p.notes||'';
-  buildModuleChecks(p.modules||[]);
+  buildModuleChecks(p.modules||[], p.module_progress||{});
   el('propModal').style.display='flex';
 }
 
-function buildModuleChecks(active) {
-  el('modulesChecks').innerHTML=MODULES.map(m=>{
-    const ck=active.includes(m.id);
-    return `<label class="module-check ${ck?'checked':''}" id="mc-${m.id}">
-      <input type="checkbox" value="${m.id}" ${ck?'checked':''} onchange="toggleCheck('${m.id}',this)"/>
-      ${m.icon} ${m.label}
-    </label>`;
+function buildModuleChecks(activeModules, moduleProgress) {
+  const mp = moduleProgress || {};
+  el('modulesChecks').innerHTML = MODULES.map(m => {
+    const isActive = activeModules.includes(m.id);
+    const pct = mp[m.id] !== undefined ? mp[m.id] : (isActive ? 0 : 0);
+    return `<div class="mp-row" id="mp-row-${m.id}">
+      <div class="mp-icon">${m.icon}</div>
+      <div class="mp-info">
+        <div class="mp-name">${m.label}</div>
+        <div class="mp-target">${m.targetLabel}</div>
+      </div>
+      <input class="mp-input" type="number" min="0" max="100" id="mp-val-${m.id}" value="${isActive?pct:''}" placeholder="%" ${!isActive?'disabled style="opacity:.35"':''}/>
+      <div class="mp-active">
+        <input type="checkbox" id="mp-chk-${m.id}" ${isActive?'checked':''} onchange="toggleModuleCheck('${m.id}',this)"/>
+      </div>
+    </div>`;
   }).join('');
 }
 
-function toggleCheck(id, inp) {
-  const l=document.getElementById('mc-'+id);
-  inp.checked?l.classList.add('checked'):l.classList.remove('checked');
+function toggleModuleCheck(id, inp) {
+  const valEl = document.getElementById('mp-val-'+id);
+  const row   = document.getElementById('mp-row-'+id);
+  if (inp.checked) {
+    valEl.disabled = false;
+    valEl.style.opacity = '1';
+    if (!valEl.value) valEl.value = '0';
+    row.style.background = 'rgba(130,10,209,.06)';
+    row.style.borderColor = 'rgba(130,10,209,.25)';
+  } else {
+    valEl.disabled = true;
+    valEl.style.opacity = '.35';
+    valEl.value = '';
+    row.style.background = '';
+    row.style.borderColor = '';
+  }
 }
 
 function closeModal(){ el('propModal').style.display='none'; }
@@ -1194,10 +1334,22 @@ function closeModalOutside(e){ if(e.target===el('propModal')) closeModal(); }
 async function saveProperty() {
   const name=el('fName').value.trim();
   if (!name){ showToast(lang==='es'?'El nombre es requerido':'Name is required','error'); return; }
-  const modules=[...document.querySelectorAll('#modulesChecks input:checked')].map(i=>i.value);
+
+  // Collect active modules and their individual progress values
+  const modules = [];
+  const module_progress = {};
+  MODULES.forEach(m => {
+    const chk = document.getElementById('mp-chk-'+m.id);
+    const val = document.getElementById('mp-val-'+m.id);
+    if (chk && chk.checked) {
+      modules.push(m.id);
+      module_progress[m.id] = Math.min(100, Math.max(0, parseInt(val.value)||0));
+    }
+  });
+
   const prop={name, city:el('fCity').value.trim(), phase:el('fPhase').value,
     days:parseInt(el('fDays').value)||0, units:parseInt(el('fUnits').value)||0,
-    entry_date:el('fEntryDate').value, notes:el('fNotes').value.trim(), modules};
+    entry_date:el('fEntryDate').value, notes:el('fNotes').value.trim(), modules, module_progress};
   const editId=el('editPropId').value;
   closeModal();
   if (editId) {
@@ -1224,7 +1376,166 @@ async function deleteProp(id) {
   showToast(t('toast_deleted'),'success');
 }
 
-// ══════ CHARTS ══════
+// ══════ PROGRESS HELPERS ══════
+function getPropProgress(p) {
+  // Average of module_progress values for active modules; if no values, use module count / total
+  const mp = p.module_progress || {};
+  const mods = p.modules || [];
+  if (!mods.length) return 0;
+  const vals = mods.map(id => (mp[id] !== undefined ? mp[id] : 0));
+  return Math.round(vals.reduce((s,v)=>s+v,0) / vals.length);
+}
+
+function getGlobalProgress() {
+  const props = state.properties;
+  if (!props.length) return 0;
+  const total = props.reduce((s,p) => s + getPropProgress(p), 0);
+  return Math.round(total / props.length);
+}
+
+// ══════ PROGRESS SECTION ══════
+function setPFilter(f, elem) {
+  progressFilter = f;
+  document.querySelectorAll('#sec-progress .filter-tab').forEach(t2=>t2.classList.remove('active'));
+  elem.classList.add('active');
+  renderProgressSection();
+}
+
+function renderProgressSection() {
+  renderGlobalProgress();
+  renderPropertyProgressCards();
+  renderModuleProgressChart();
+}
+
+function renderGlobalProgress() {
+  const props = state.properties;
+  const g = getGlobalProgress();
+  el('pgValue').textContent = g + '%';
+  el('pgPct').textContent = g + '%';
+  el('pgFill').style.width = g + '%';
+  el('pgRingCenter').textContent = g + '%';
+
+  const totalMods = props.reduce((s,p)=>(p.modules||[]).length+s,0);
+  el('pgSub').textContent = props.length + (lang==='en'?' properties · ':' propiedades · ') + totalMods + (lang==='en'?' active modules':' módulos activos');
+
+  // Phase breakdown stats
+  el('pgStats').innerHTML = Object.entries(PHASES).map(([k,cfg])=>{
+    const cnt = props.filter(p=>p.phase===k).length;
+    const avg = cnt ? Math.round(props.filter(p=>p.phase===k).reduce((s,p)=>s+getPropProgress(p),0)/cnt) : 0;
+    return `<div class="pg-stat">
+      <div class="pg-stat-val" style="color:${cfg.color}">${avg}%</div>
+      <div class="pg-stat-label">${cfg.label}</div>
+    </div>`;
+  }).join('');
+
+  // Draw ring chart
+  const canvas = el('pgRing');
+  const ctx = canvas.getContext('2d');
+  canvas.width = 140; canvas.height = 140;
+  ctx.clearRect(0,0,140,140);
+  const cx=70,cy=70,r=54,lw=12;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.strokeStyle='rgba(255,255,255,.15)'; ctx.lineWidth=lw; ctx.stroke();
+  const angle = (g/100)*Math.PI*2 - Math.PI/2;
+  ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI/2,angle);
+  ctx.strokeStyle='#F7B500'; ctx.lineWidth=lw; ctx.lineCap='round'; ctx.stroke();
+}
+
+function renderPropertyProgressCards() {
+  const sort = (el('progressSort') ? el('progressSort').value : 'pct_desc');
+  let props = [...state.properties];
+  if (progressFilter !== 'all') props = props.filter(p=>p.phase===progressFilter);
+
+  props.sort((a,b) => {
+    if (sort==='pct_desc') return getPropProgress(b)-getPropProgress(a);
+    if (sort==='pct_asc')  return getPropProgress(a)-getPropProgress(b);
+    if (sort==='name')     return a.name.localeCompare(b.name);
+    if (sort==='phase') {
+      const order={implementation:0,pilot:1,support:2,done:3};
+      return (order[a.phase]||0)-(order[b.phase]||0);
+    }
+    return 0;
+  });
+
+  if (!props.length) {
+    el('propProgressGrid').innerHTML=`<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text-muted);font-size:13px">📭 ${t('empty_props')}</div>`;
+    return;
+  }
+
+  el('propProgressGrid').innerHTML = props.map(p => {
+    const cfg = PHASES[p.phase] || PHASES.implementation;
+    const mp  = p.module_progress || {};
+    const overall = getPropProgress(p);
+    const clr = overall>=80?'#00b460':overall>=50?'#e67e00':'#820ad1';
+    const activeMods = p.modules || [];
+
+    const modRows = MODULES.filter(m => activeMods.includes(m.id)).map(m => {
+      const pct = mp[m.id] !== undefined ? mp[m.id] : 0;
+      const mc  = pct>=80?'#00b460':pct>=50?'#e67e00':'#820ad1';
+      return `<div class="pp-mod-row">
+        <div class="pp-mod-icon">${m.icon}</div>
+        <div class="pp-mod-name">${m.label}</div>
+        <div class="pp-mod-val">${pct}%</div>
+      </div>
+      <div class="pp-mod-bar-wrap">
+        <div class="pp-mod-bar"><div class="pp-mod-fill" style="width:${pct}%;background:${mc}"></div></div>
+      </div>`;
+    }).join('');
+
+    const inactiveMods = MODULES.filter(m => !activeMods.includes(m.id));
+
+    return `<div class="pp-card">
+      <div class="pp-header">
+        <div>
+          <div class="pp-name">${p.name}</div>
+          <div class="pp-city">📍 ${p.city||'—'} · ${p.units||0} ${lang==='en'?'units':'unid.'}</div>
+          ${p.entry_date?`<div style="font-size:10px;color:var(--text-muted);margin-top:2px">📅 ${p.entry_date}</div>`:''}
+        </div>
+        <div>
+          <div class="pp-pct-big" style="color:${clr}">${overall}%</div>
+          <span class="pill ${cfg.pill}" style="margin-top:4px;display:inline-flex">${cfg.label}</span>
+        </div>
+      </div>
+      <div class="pp-body">
+        <div style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-bottom:4px">
+            <span>${lang==='en'?'Overall progress':'Avance general'}</span>
+            <span style="font-weight:700;color:${clr}">${overall}%</span>
+          </div>
+          <div class="pp-overall-bar"><div class="pp-overall-fill" style="width:${overall}%;background:${clr}"></div></div>
+        </div>
+        ${activeMods.length ? `<div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">${lang==='en'?'Active modules':'Módulos activos'} (${activeMods.length}/${MODULES.length})</div>
+        <div class="pp-modules">${modRows}</div>` : `<div style="font-size:12px;color:var(--text-muted);padding:10px 0;text-align:center">Sin módulos activos</div>`}
+        ${inactiveMods.length?`<div style="font-size:10px;color:var(--text-muted);margin-top:4px">${lang==='en'?'Pending':'Pendientes'}: ${inactiveMods.map(m=>m.icon+' '+m.label).join(', ')}</div>`:''}
+      </div>
+      <div class="pp-footer">
+        <div class="pp-days">⏱ ${p.days||0} ${lang==='en'?'days':'días'}</div>
+        <button class="pp-edit-btn" onclick="openEditModal('${p.id}')">✏️ ${lang==='en'?'Edit':'Editar'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderModuleProgressChart() {
+  const props = state.properties;
+  const labels = props.map(p => p.name.length>16 ? p.name.substring(0,16)+'…' : p.name);
+  const datasets = MODULES.map((m,i) => {
+    const colors = ['#820ad1','#e67e00','#00b460','#0088cc','#F7B500','#a34dde','#00ccaa','#ff6b6b'];
+    return {
+      label: m.icon+' '+m.label,
+      data: props.map(p => (p.modules||[]).includes(m.id) ? ((p.module_progress||{})[m.id]||0) : null),
+      backgroundColor: colors[i%colors.length],
+      borderRadius: 4, borderSkipped: false, barThickness: 10
+    };
+  });
+  makeChart('chartModProgress','bar',labels,datasets,{},{
+    indexAxis:'y',
+    scales:{x:{stacked:false,max:100},y:{stacked:false}},
+    plugins:{legend:{position:'bottom'}}
+  });
+}
+
+
 function destroyChart(id){ if(charts[id]){try{charts[id].destroy();}catch(e){} delete charts[id];} }
 
 function makeChart(id, type, labels, datasets, extra={}, extraOpts={}) {
