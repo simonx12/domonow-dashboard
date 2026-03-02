@@ -1325,7 +1325,8 @@ function updateGreeting() {
 function updateClock() {
   const now=new Date();
   el('topbarClock').textContent=now.toLocaleTimeString(lang==='ja'?'ja-JP':lang==='pt'?'pt-BR':lang==='en'?'en-US':'es-CO');
-  el('sidebarDate').textContent=now.toLocaleDateString(lang==='ja'?'ja-JP':lang==='pt'?'pt-BR':lang==='en'?'en-US':'es-CO',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+  const yyyy=now.getFullYear(), mm=String(now.getMonth()+1).padStart(2,'0'), dd=String(now.getDate()).padStart(2,'0');
+  el('sidebarDate').textContent=`${yyyy}-${mm}-${dd}`;
   // update greeting every minute
   if (now.getSeconds()===0) updateGreeting();
 }
