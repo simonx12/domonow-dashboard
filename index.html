@@ -548,10 +548,10 @@ tr:hover td{background:var(--surface2)}
 const MODULES = [
   {
     id:'acceso', label:'Acceso', icon:'🔑',
-    type:'pct_units', pct:0.10,
+    type:'pct_units', pct:0.80,
     unit:'aptos con acceso',
-    metaLabel: u => `Meta: ${calcMeta('acceso',u)} aptos (10% de ${Math.round(u*0.8)})`,
-    metaFn: u => Math.round(u * 0.8 * 0.10)
+    metaLabel: u => `Meta: ${calcMeta('acceso',u)} aptos (80% de ${u})`,
+    metaFn: u => Math.round(u * 0.80)
   },
   {
     id:'muro', label:'Muro', icon:'💬',
