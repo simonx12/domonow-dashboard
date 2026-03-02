@@ -302,7 +302,6 @@ tr:hover td{background:var(--surface2)}
 <header class="topbar">
   <div class="topbar-title">Panel de <span style="color:var(--domo)">Implementación</span></div>
   <div class="topbar-actions">
-    <div class="realtime-badge off" id="realtimeBadge"><div class="realtime-dot"></div><span id="realtimeText">Sin conexión</span></div>
     <div class="topbar-clock" id="topbarClock">--:--:--</div>
     <div class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</div>
     <div class="btn-icon" onclick="refreshData()" id="refreshBtn">↻</div>
@@ -548,59 +547,51 @@ tr:hover td{background:var(--surface2)}
 const MODULES = [
   {
     id:'acceso', label:'Acceso', icon:'🔑',
-    type:'pct_units', pct:0.80,
     unit:'aptos con acceso',
-    metaLabel: u => `Meta: ${calcMeta('acceso',u)} aptos (80% de ${u})`,
+    metaLabel: u => `Meta: ${Math.round(u*0.80)} aptos (80% de ${u})`,
     metaFn: u => Math.round(u * 0.80)
   },
   {
     id:'muro', label:'Muro', icon:'💬',
-    type:'fixed', fixedVal:8,
     unit:'publicaciones/mes',
-    metaLabel: u => `Meta: 8 publicaciones al mes`,
+    metaLabel: u => `Meta fija: 8 publicaciones al mes`,
     metaFn: u => 8
   },
   {
     id:'alertas', label:'Alertas', icon:'🔔',
-    type:'range', low:2, high:5,
     unit:'alertas/mes',
     metaLabel: u => `Meta: mínimo 2, ideal 5 alertas/mes`,
-    metaFn: u => 2   // se calcula sobre el mínimo (2)
+    metaFn: u => 2
   },
   {
     id:'solicitudes', label:'Solicitudes', icon:'📋',
-    type:'pct_units', pct:0.30,
     unit:'aptos con solicitudes',
-    metaLabel: u => `Meta: ${calcMeta('solicitudes',u)} aptos (30% de ${Math.round(u*0.8)})`,
-    metaFn: u => Math.round(u * 0.8 * 0.30)
+    metaLabel: u => `Meta: ${Math.round(u*0.30)} aptos (30% de ${u})`,
+    metaFn: u => Math.round(u * 0.30)
   },
   {
     id:'zonas', label:'Zonas Comunes', icon:'⬜',
-    type:'pct_units', pct:0.30,
     unit:'reservas/mes',
-    metaLabel: u => `Meta: ${calcMeta('zonas',u)} reservas (30% de ${Math.round(u*0.8)})`,
-    metaFn: u => Math.round(u * 0.8 * 0.30)
+    metaLabel: u => `Meta: ${Math.round(u/6)} reservas (1/6 de ${u})`,
+    metaFn: u => Math.round(u / 6)
   },
   {
     id:'documentos', label:'Documentos', icon:'📄',
-    type:'pct_units', pct:0.80,
     unit:'aptos con acceso',
-    metaLabel: u => `Meta: ${calcMeta('documentos',u)} aptos (80% de ${Math.round(u*0.8)})`,
-    metaFn: u => Math.round(u * 0.8 * 0.80)
+    metaLabel: u => `Meta: ${Math.round(u*0.80)} aptos (80% de ${u})`,
+    metaFn: u => Math.round(u * 0.80)
   },
   {
     id:'financiero', label:'Financiero', icon:'💰',
-    type:'pct_units', pct:0.80,
     unit:'aptos activos',
-    metaLabel: u => `Meta: ${calcMeta('financiero',u)} aptos (80% de ${Math.round(u*0.8)})`,
-    metaFn: u => Math.round(u * 0.8 * 0.80)
+    metaLabel: u => `Meta: ${Math.round(u*0.80)} aptos (80% de ${u})`,
+    metaFn: u => Math.round(u * 0.80)
   },
   {
     id:'votaciones', label:'Votaciones', icon:'🗳️',
-    type:'pct_units', pct:0.80,
     unit:'aptos participantes',
-    metaLabel: u => `Meta: ${calcMeta('votaciones',u)} aptos (80% de ${Math.round(u*0.8)})`,
-    metaFn: u => Math.round(u * 0.8 * 0.80)
+    metaLabel: u => `Meta: ${Math.round(u*0.80)} aptos (80% de ${u})`,
+    metaFn: u => Math.round(u * 0.80)
   }
 ];
 
