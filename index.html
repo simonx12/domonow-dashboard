@@ -727,7 +727,7 @@ async function deleteSupabase(id){if(!sb)return;const{error}=await sb.from('prop
 
 function startRealtime(){if(!sb)return;sbChannel=sb.channel('dn-rt').on('postgres_changes',{event:'*',schema:'public',table:'properties'},()=>fetchAllData()).subscribe(s=>setRealtimeBadge(s==='SUBSCRIBED'));}
 function startAutoRefresh(){if(autoRefreshTimer)clearInterval(autoRefreshTimer);const sec=parseInt(settings.autoRefresh)||60;if(sb&&sec>0)autoRefreshTimer=setInterval(()=>fetchAllData(),sec*1000);}
-function setRealtimeBadge(on){const b=$('realtimeBadge'),tx=$('realtimeText');if(on){b.classList.remove('off');tx.textContent='Tiempo Real';}else{b.classList.add('off');tx.textContent='Sin conexión';}}
+function setRealtimeBadge(on){}
 function disconnectSupabase(){if(sbChannel&&sb)sb.removeChannel(sbChannel);sb=null;isConnected=false;localStorage.removeItem('dn_sb_url');localStorage.removeItem('dn_sb_key');setRealtimeBadge(false);state.properties=[];goConnect();showToast('Desconectado','success');}
 
 // ══════ KPIs ══════
