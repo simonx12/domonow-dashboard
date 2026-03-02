@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DomoNow – Dashboard de Implementación</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --domo: #820ad1; --domo-70: #a34dde; --domo-30: #ddb3f3;
+  --horizonte: #F7B500; --horizonte-50: #fbd980;
+  --black: #1A1A1A; --neutral: #F2F2F2;
+  --bg: #f7f7fb; --surface: #ffffff; --surface2: #f0eef8;
+  --border: #e4e0f0; --text: #1A1A1A; --text-muted: #6b6b7b;
+  --shadow: 0 2px 12px rgba(130,10,209,.08);
+  --shadow-md: 0 4px 24px rgba(130,10,209,.13);
+  --radius: 16px; --radius-sm: 10px;
+}
+[data-theme="dark"] {
+  --bg: #0e0a18; --surface: #1a1228; --surface2: #241a38;
+  --border: #352850; --text: #f0eef8; --text-muted: #a09ab8;
+  --shadow: 0 2px 12px rgba(0,0,0,.4); --shadow-md: 0 4px 24px rgba(0,0,0,.5);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;width:240px;height:100vh;background:linear-gradient(160deg,var(--domo) 0%,#5a0899 100%);display:flex;flex-direction:column;z-index:100;padding:0 0 24px;box-shadow:4px 0 24px rgba(130,10,209,.3)}
+.sidebar-logo{padding:28px 24px 24px;border-bottom:1px solid rgba(255,255,255,.15)}
+.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-text{font-size:20px;font-weight:700;color:#fff}.logo-text span{color:var(--horizonte)}
+.sidebar-nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius-sm);color:rgba(255,255,255,.75);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.2)}
+.nav-item.active{background:rgba(247,181,0,.2);border-color:rgba(247,181,0,.4);color:var(--horizonte)}
+.sidebar-version{font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-top:12px;padding:0 16px}
+
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:240px;right:0;height:64px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:99;box-shadow:var(--shadow);transition:background .3s}
+.topbar-title{font-size:16px;font-weight:700}.topbar-title span{color:var(--domo)}
+.topbar-actions{display:flex;align-items:center;gap:12px}
+.btn-icon{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;color:var(--text-muted);font-size:16px}
+.btn-icon:hover{border-color:var(--domo);color:var(--domo)}
+.lang-btn{padding:6px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;cursor:pointer;color:var(--text);transition:all .2s}
+.lang-btn:hover{border-color:var(--domo);color:var(--domo)}
+.realtime-badge{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:rgba(0,200,100,.1);border:1px solid rgba(0,200,100,.3);font-size:11px;font-weight:600;color:#00b460}
+.realtime-dot{width:7px;height:7px;border-radius:50%;background:#00b460;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+/* MAIN */
+.main{margin-left:240px;padding-top:64px;min-height:100vh}
+.content{padding:28px}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:28px}
+.kpi-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:20px 22px;box-shadow:var(--shadow);transition:all .3s;position:relative;overflow:hidden;cursor:default}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kpi-color,var(--domo))}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.kpi-label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.kpi-value{font-size:32px;font-weight:700;line-height:1;margin-bottom:6px}
+.kpi-sub{font-size:12px;color:var(--text-muted)}
+.kpi-icon{position:absolute;right:18px;top:18px;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--kpi-bg,rgba(130,10,209,.1));color:var(--kpi-color,var(--domo));font-size:20px}
+
+/* CONFIG */
+.config-banner{background:linear-gradient(135deg,rgba(130,10,209,.08) 0%,rgba(247,181,0,.08) 100%);border:1px dashed var(--domo-70);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.config-inputs{display:flex;gap:12px;flex:1;flex-wrap:wrap}
+.config-input{flex:1;min-width:220px;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);font-family:'Montserrat',sans-serif;font-size:12px;color:var(--text);outline:none;transition:border .2s}
+.config-input:focus{border-color:var(--domo)}
+.btn-primary{padding:10px 20px;border-radius:var(--radius-sm);background:var(--domo);color:#fff;border:none;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-secondary{padding:10px 20px;border-radius:var(--radius-sm);background:var(--horizonte);color:#1A1A1A;border:none;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-secondary:hover{filter:brightness(1.05);transform:translateY(-1px)}
+
+/* SECTION */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.section-title::before{content:'';width:4px;height:18px;border-radius:2px;background:var(--domo);display:block}
+
+/* USERS WIDGET */
+.users-widget{background:linear-gradient(135deg,var(--domo) 0%,#5a0899 100%);border-radius:var(--radius);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;box-shadow:0 8px 32px rgba(130,10,209,.3);flex-wrap:wrap;gap:16px}
+.users-label{font-size:12px;font-weight:600;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.8px}
+.users-count{font-size:48px;font-weight:700;color:#fff;line-height:1}
+.users-sub{font-size:13px;color:rgba(255,255,255,.65);font-weight:500;margin-top:4px}
+.users-breakdown{display:flex;gap:24px}
+.users-item{display:flex;flex-direction:column;align-items:center;gap:4px}
+.users-item-val{font-size:22px;font-weight:700;color:#fff}
+.users-item-label{font-size:11px;color:rgba(255,255,255,.6);font-weight:500}
+.users-icon{width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:32px}
+
+/* PHASES */
+.phases-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:28px}
+.phase-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);transition:all .3s}
+.phase-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.phase-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.phase-name{font-size:14px;font-weight:700;margin-left:10px}
+.phase-count{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.phase-days{font-size:11px;color:var(--text-muted);font-weight:500}
+.phase-body{padding:16px 20px}
+.phase-pct{font-size:14px;font-weight:700}
+.progress-track{width:100%;height:8px;border-radius:4px;background:var(--surface2);margin-bottom:16px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.modules-mini{display:flex;flex-wrap:wrap;gap:6px}
+.module-chip{font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--text-muted);background:var(--surface2)}
+.chip-done{background:rgba(0,180,100,.1);border-color:rgba(0,180,100,.3);color:#00a857}
+.chip-pending{background:rgba(130,10,209,.07);border-color:rgba(130,10,209,.2);color:var(--domo)}
+
+/* TABLE */
+.table-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;margin-bottom:28px}
+.table-header{padding:18px 22px;border-bottom:1px solid var(--border)}
+table{width:100%;border-collapse:collapse}
+th{padding:12px 16px;text-align:left;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;background:var(--surface2);border-bottom:1px solid var(--border)}
+td{padding:13px 16px;font-size:13px;border-bottom:1px solid var(--border);transition:background .2s;font-weight:500}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface2)}
+.mod-cell{display:flex;align-items:center;gap:10px;font-weight:600}
+.mod-badge{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--domo) 0%,var(--domo-70) 100%);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;flex-shrink:0}
+.pill{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.pill-p{background:rgba(130,10,209,.1);color:var(--domo)}
+.pill-pi{background:rgba(247,181,0,.15);color:#c48a00}
+.pill-s{background:rgba(0,180,100,.1);color:#00a857}
+.pill-pe{background:var(--surface2);color:var(--text-muted);border:1px solid var(--border)}
+.bar-cell{display:flex;align-items:center;gap:10px}
+.mini-bar{flex:1;height:6px;border-radius:3px;background:var(--surface2);overflow:hidden;min-width:60px}
+.mini-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.pct-label{font-size:12px;font-weight:700;min-width:34px;text-align:right}
+
+/* TIMELINE */
+.timeline-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);padding:20px 22px;margin-bottom:28px}
+.timeline{display:flex;position:relative;margin-top:20px}
+.timeline::before{content:'';position:absolute;top:20px;left:10%;right:10%;height:2px;background:var(--border);z-index:0}
+.tl-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;z-index:1}
+.tl-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;border:3px solid var(--bg);transition:all .3s}
+.tl-active{background:var(--domo);box-shadow:0 0 0 4px rgba(130,10,209,.2)}
+.tl-done{background:#00b460}
+.tl-upcoming{background:var(--surface2);border:2px solid var(--border)}
+.tl-label{font-size:11px;font-weight:600;text-align:center}
+.tl-sub{font-size:10px;color:var(--text-muted);text-align:center}
+
+/* TOAST */
+.toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{padding:12px 20px;border-radius:12px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-md);font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;animation:slideIn .3s ease;max-width:320px;color:var(--text);transition:opacity .3s,transform .3s}
+.toast-success{border-color:rgba(0,180,100,.4);background:rgba(0,180,100,.05);color:#00a857}
+.toast-error{border-color:rgba(220,50,50,.4);background:rgba(220,50,50,.05);color:#dc3232}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+.spin{animation:spinning 1s linear infinite}
+@keyframes spinning{to{transform:rotate(360deg)}}
+.fade-in{animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.last-updated{font-size:11px;color:var(--text-muted)}
+
+@media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.phases-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0}.kpi-grid{grid-template-columns:1fr}.users-breakdown{display:none}}
+</style>
+</head>
+<body data-theme="light">
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-wrap">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <path d="M18 4L32 16V32H22V22H14V32H4V16L18 4Z" fill="white" fill-opacity="0.9"/>
+        <rect x="15" y="14" width="6" height="5" rx="1" fill="#F7B500"/>
+      </svg>
+      <span class="logo-text">Domo<span>Now</span></span>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active"><span style="font-size:16px">⊞</span> <span data-i18n="nav_dashboard">Dashboard</span></a>
+    <a href="#" class="nav-item"><span style="font-size:16px">🏢</span> <span data-i18n="nav_properties">Propiedades</span></a>
+    <a href="#" class="nav-item"><span style="font-size:16px">🧩</span> <span data-i18n="nav_modules">Módulos</span></a>
+    <a href="#" class="nav-item"><span style="font-size:16px">👥</span> <span data-i18n="nav_users">Usuarios</span></a>
+    <a href="#" class="nav-item"><span style="font-size:16px">📊</span> <span data-i18n="nav_reports">Reportes</span></a>
+    <a href="#" class="nav-item"><span style="font-size:16px">⚙️</span> <span data-i18n="nav_settings">Configuración</span></a>
+  </nav>
+  <div class="sidebar-version">DomoNow v2.0 · 2025</div>
+</aside>
+
+<header class="topbar">
+  <div class="topbar-title" data-i18n="page_title">Panel de <span>Implementación</span></div>
+  <div class="topbar-actions">
+    <div class="realtime-badge"><div class="realtime-dot"></div><span data-i18n="realtime">Tiempo Real</span></div>
+    <div class="last-updated">🕐 <span id="lastUpdatedText">--</span></div>
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+    <div class="btn-icon" onclick="toggleTheme()" id="themeBtn" title="Tema">🌙</div>
+    <div class="btn-icon" onclick="refreshData()" id="refreshBtn" title="Actualizar">↻</div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="content">
+
+    <div class="config-banner fade-in" id="configBanner">
+      <div style="font-size:28px">🔗</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px" data-i18n="connect_supabase">Conectar con Supabase</div>
+        <div style="font-size:11px;color:var(--text-muted)" data-i18n="connect_desc">Ingresa tus credenciales para sincronización en tiempo real</div>
+      </div>
+      <div class="config-inputs">
+        <input class="config-input" id="sbUrl" placeholder="https://tu-proyecto.supabase.co" />
+        <input class="config-input" id="sbKey" placeholder="anon-public-key" type="password" />
+        <button class="btn-primary" onclick="connectSupabase()" data-i18n="btn_connect">Conectar</button>
+        <button class="btn-secondary" onclick="loadDemoData()" data-i18n="btn_demo">Demo</button>
+      </div>
+    </div>
+
+    <div class="kpi-grid fade-in">
+      <div class="kpi-card" style="--kpi-color:#820ad1;--kpi-bg:rgba(130,10,209,.1)">
+        <div class="kpi-icon">🏘️</div>
+        <div class="kpi-label" data-i18n="kpi_total">Total Propiedades</div>
+        <div class="kpi-value" id="kpiTotal">0</div>
+        <div class="kpi-sub" data-i18n="kpi_total_sub">En plataforma</div>
+      </div>
+      <div class="kpi-card" style="--kpi-color:#e67e00;--kpi-bg:rgba(247,181,0,.12)">
+        <div class="kpi-icon">⚙️</div>
+        <div class="kpi-label" data-i18n="kpi_impl">En Implementación</div>
+        <div class="kpi-value" id="kpiImpl">0</div>
+        <div class="kpi-sub">⏱ <span id="kpiImplDays">0</span> <span data-i18n="days_avg">días promedio</span></div>
+      </div>
+      <div class="kpi-card" style="--kpi-color:#0088cc;--kpi-bg:rgba(0,136,204,.1)">
+        <div class="kpi-icon">🧪</div>
+        <div class="kpi-label" data-i18n="kpi_pilot">Piloto</div>
+        <div class="kpi-value" id="kpiPilot">0</div>
+        <div class="kpi-sub">⏱ <span id="kpiPilotDays">0</span> <span data-i18n="days_avg">días promedio</span></div>
+      </div>
+      <div class="kpi-card" style="--kpi-color:#00b460;--kpi-bg:rgba(0,180,100,.1)">
+        <div class="kpi-icon">🛡️</div>
+        <div class="kpi-label" data-i18n="kpi_support">Soporte Continuo</div>
+        <div class="kpi-value" id="kpiSupport">0</div>
+        <div class="kpi-sub">⏱ <span id="kpiSupportDays">0</span> <span data-i18n="days_avg">días promedio</span></div>
+      </div>
+    </div>
+
+    <div class="users-widget fade-in">
+      <div>
+        <div class="users-label" data-i18n="users_label">Usuarios Registrados</div>
+        <div class="users-count" id="totalUsers">0</div>
+        <div class="users-sub" data-i18n="users_sub">Total en la plataforma · actualizado en tiempo real</div>
+      </div>
+      <div class="users-breakdown">
+        <div class="users-item"><div class="users-item-val" id="usersAdmin">0</div><div class="users-item-label" data-i18n="users_admin">Administradores</div></div>
+        <div class="users-item"><div class="users-item-val" id="usersResident">0</div><div class="users-item-label" data-i18n="users_residents">Residentes</div></div>
+        <div class="users-item"><div class="users-item-val" id="usersStaff">0</div><div class="users-item-label" data-i18n="users_staff">Staff</div></div>
+      </div>
+      <div class="users-icon">👥</div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title" data-i18n="phases_title">Progreso por Fase</div>
+    </div>
+    <div class="phases-grid fade-in" id="phasesGrid"></div>
+
+    <div class="timeline-card fade-in">
+      <div class="section-header"><div class="section-title" data-i18n="timeline_title">Flujo de Implementación</div></div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+
+    <div class="table-card fade-in">
+      <div class="table-header section-header">
+        <div class="section-title" data-i18n="modules_title">Módulos por Fase</div>
+        <div style="font-size:11px;color:var(--text-muted)" id="tableUpdated"></div>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="modulesTable">
+          <thead><tr>
+            <th data-i18n="th_module">Módulo</th>
+            <th data-i18n="th_impl">Implementación</th>
+            <th data-i18n="th_pilot">Piloto</th>
+            <th data-i18n="th_support">Soporte</th>
+            <th data-i18n="th_pending">Pendiente</th>
+            <th data-i18n="th_progress">Progreso</th>
+          </tr></thead>
+          <tbody id="modulesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ── i18n ──────────────────────────────────────────────────────────
+const STRINGS = {
+  es: {
+    page_title:'Panel de Implementación',realtime:'Tiempo Real',
+    connect_supabase:'Conectar con Supabase',connect_desc:'Ingresa tus credenciales para sincronización en tiempo real',
+    btn_connect:'Conectar',btn_demo:'Demo',
+    kpi_total:'Total Propiedades',kpi_total_sub:'En plataforma',
+    kpi_impl:'En Implementación',kpi_pilot:'Piloto',kpi_support:'Soporte Continuo',days_avg:'días promedio',
+    users_label:'Usuarios Registrados',users_sub:'Total en la plataforma · actualizado en tiempo real',
+    users_admin:'Administradores',users_residents:'Residentes',users_staff:'Staff',
+    phases_title:'Progreso por Fase',timeline_title:'Flujo de Implementación',modules_title:'Módulos por Fase',
+    th_module:'Módulo',th_impl:'Implementación',th_pilot:'Piloto',th_support:'Soporte',th_pending:'Pendiente',th_progress:'Progreso',
+    phase_impl:'En Implementación',phase_pilot:'Piloto',phase_support:'Soporte Continuo',phase_done:'Completado',
+    mod_acceso:'Acceso',mod_muro:'Muro',mod_alertas:'Alertas',mod_solicitudes:'Solicitudes',
+    mod_zonas:'Zonas Comunes',mod_documentos:'Documentos',mod_financiero:'Financiero',mod_votaciones:'Votaciones',
+    nav_dashboard:'Dashboard',nav_properties:'Propiedades',nav_modules:'Módulos',nav_users:'Usuarios',nav_reports:'Reportes',nav_settings:'Configuración',
+    connected:'✓ Conectado a Supabase',demo_mode:'⚡ Modo demo activado',refreshed:'↻ Datos actualizados',
+  },
+  en: {
+    page_title:'Implementation Panel',realtime:'Real-Time',
+    connect_supabase:'Connect to Supabase',connect_desc:'Enter your credentials for real-time synchronization',
+    btn_connect:'Connect',btn_demo:'Demo',
+    kpi_total:'Total Properties',kpi_total_sub:'On platform',
+    kpi_impl:'In Implementation',kpi_pilot:'Pilot',kpi_support:'Ongoing Support',days_avg:'avg days',
+    users_label:'Registered Users',users_sub:'Total on platform · updated in real time',
+    users_admin:'Admins',users_residents:'Residents',users_staff:'Staff',
+    phases_title:'Progress by Phase',timeline_title:'Implementation Flow',modules_title:'Modules by Phase',
+    th_module:'Module',th_impl:'Implementation',th_pilot:'Pilot',th_support:'Support',th_pending:'Pending',th_progress:'Progress',
+    phase_impl:'In Implementation',phase_pilot:'Pilot',phase_support:'Ongoing Support',phase_done:'Completed',
+    mod_acceso:'Access',mod_muro:'Wall',mod_alertas:'Alerts',mod_solicitudes:'Requests',
+    mod_zonas:'Common Zones',mod_documentos:'Documents',mod_financiero:'Financial',mod_votaciones:'Voting',
+    nav_dashboard:'Dashboard',nav_properties:'Properties',nav_modules:'Modules',nav_users:'Users',nav_reports:'Reports',nav_settings:'Settings',
+    connected:'✓ Connected to Supabase',demo_mode:'⚡ Demo mode activated',refreshed:'↻ Data refreshed',
+  }
+};
+let lang = localStorage.getItem('dn_lang')||'es';
+const t = k => STRINGS[lang][k]||k;
+
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const v=STRINGS[lang][el.dataset.i18n];
+    if(v) el.textContent=v;
+  });
+  document.getElementById('langBtn').textContent=lang==='es'?'EN':'ES';
+  renderAll();
+}
+function toggleLang(){lang=lang==='es'?'en':'es';localStorage.setItem('dn_lang',lang);applyI18n();}
+
+// ── THEME ──────────────────────────────────────────────────────────
+let theme=localStorage.getItem('dn_theme')||'light';
+document.body.dataset.theme=theme;
+function toggleTheme(){
+  theme=theme==='light'?'dark':'light';
+  document.body.dataset.theme=theme;
+  localStorage.setItem('dn_theme',theme);
+  document.getElementById('themeBtn').textContent=theme==='dark'?'☀️':'🌙';
+}
+
+// ── DATA ───────────────────────────────────────────────────────────
+let data = {
+  phases:[
+    {id:'impl',key:'phase_impl',color:'#820ad1',bg:'rgba(130,10,209,.1)',count:12,days:45,pct:35,
+     modules:{acceso:1,muro:1,alertas:0,solicitudes:1,zonas:0,documentos:0,financiero:0,votaciones:0}},
+    {id:'pilot',key:'phase_pilot',color:'#e67e00',bg:'rgba(247,181,0,.12)',count:8,days:28,pct:65,
+     modules:{acceso:1,muro:1,alertas:1,solicitudes:1,zonas:1,documentos:0,financiero:0,votaciones:0}},
+    {id:'support',key:'phase_support',color:'#00b460',bg:'rgba(0,180,100,.1)',count:5,days:90,pct:92,
+     modules:{acceso:1,muro:1,alertas:1,solicitudes:1,zonas:1,documentos:1,financiero:1,votaciones:1}},
+    {id:'done',key:'phase_done',color:'#0088cc',bg:'rgba(0,136,204,.1)',count:3,days:180,pct:100,
+     modules:{acceso:1,muro:1,alertas:1,solicitudes:1,zonas:1,documentos:1,financiero:1,votaciones:1}}
+  ],
+  modules:[
+    {id:'acceso',icon:'🔑',impl:18,pilot:8,support:5,pending:2},
+    {id:'muro',icon:'💬',impl:15,pilot:7,support:5,pending:6},
+    {id:'alertas',icon:'🔔',impl:10,pilot:6,support:5,pending:12},
+    {id:'solicitudes',icon:'📋',impl:12,pilot:8,support:5,pending:8},
+    {id:'zonas',icon:'⬜',impl:8,pilot:5,support:5,pending:15},
+    {id:'documentos',icon:'📄',impl:5,pilot:4,support:5,pending:19},
+    {id:'financiero',icon:'💰',impl:4,pilot:3,support:5,pending:21},
+    {id:'votaciones',icon:'🗳️',impl:3,pilot:2,support:5,pending:23}
+  ],
+  users:{total:4287,admin:184,resident:3910,staff:193},
+  lastUpdated:new Date()
+};
+
+// Load cache
+try{const c=localStorage.getItem('dn_data');if(c){const p=JSON.parse(c);data={...data,...p,lastUpdated:new Date(p.lastUpdated||Date.now())}}}catch(e){}
+
+function save(){localStorage.setItem('dn_data',JSON.stringify({...data,lastUpdated:data.lastUpdated.toISOString()}))}
+
+// ── RENDERS ────────────────────────────────────────────────────────
+const MODS=['acceso','muro','alertas','solicitudes','zonas','documentos','financiero','votaciones'];
+
+function renderKPIs(){
+  const ph=data.phases;
+  document.getElementById('kpiTotal').textContent=ph.reduce((s,p)=>s+p.count,0);
+  document.getElementById('kpiImpl').textContent=ph[0].count;
+  document.getElementById('kpiImplDays').textContent=ph[0].days;
+  document.getElementById('kpiPilot').textContent=ph[1].count;
+  document.getElementById('kpiPilotDays').textContent=ph[1].days;
+  document.getElementById('kpiSupport').textContent=ph[2].count;
+  document.getElementById('kpiSupportDays').textContent=ph[2].days;
+  document.getElementById('totalUsers').textContent=data.users.total.toLocaleString();
+  document.getElementById('usersAdmin').textContent=data.users.admin;
+  document.getElementById('usersResident').textContent=data.users.resident.toLocaleString();
+  document.getElementById('usersStaff').textContent=data.users.staff;
+  document.getElementById('lastUpdatedText').textContent=data.lastUpdated.toLocaleTimeString();
+}
+
+function renderPhaseCards(){
+  const g=document.getElementById('phasesGrid');
+  g.innerHTML=data.phases.map(ph=>{
+    const chips=MODS.map(m=>{
+      const v=ph.modules[m]||0;
+      const cls=v?'chip-done':'chip-pending';
+      return `<div class="module-chip ${cls}">${t('mod_'+m)}</div>`;
+    }).join('');
+    return`<div class="phase-card">
+      <div class="phase-header">
+        <div style="display:flex;align-items:center">
+          <div class="phase-dot" style="background:${ph.color}"></div>
+          <div class="phase-name">${t(ph.key)}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="phase-days">⏱ ${ph.days} días</div>
+          <div class="phase-count" style="background:${ph.bg};color:${ph.color}">${ph.count} props</div>
+        </div>
+      </div>
+      <div class="phase-body">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:12px;color:var(--text-muted);font-weight:500">${t('th_progress')}</span>
+          <span class="phase-pct" style="color:${ph.color}">${ph.pct}%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${ph.pct}%;background:${ph.color}"></div></div>
+        <div class="modules-mini">${chips}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderModules(){
+  const tbody=document.getElementById('modulesBody');
+  tbody.innerHTML=data.modules.map(m=>{
+    const total=m.impl+m.pilot+m.support+m.pending;
+    const done=m.impl+m.pilot+m.support;
+    const pct=total>0?Math.round((done/total)*100):0;
+    const clr=pct>=80?'#00b460':pct>=50?'#e67e00':'#820ad1';
+    return`<tr>
+      <td><div class="mod-cell"><div class="mod-badge">${m.icon}</div>${t('mod_'+m.id)}</div></td>
+      <td><span class="pill pill-p">${m.impl}</span></td>
+      <td><span class="pill pill-pi">${m.pilot}</span></td>
+      <td><span class="pill pill-s">${m.support}</span></td>
+      <td><span class="pill pill-pe">${m.pending}</span></td>
+      <td><div class="bar-cell">
+        <div class="mini-bar"><div class="mini-fill" style="width:${pct}%;background:${clr}"></div></div>
+        <div class="pct-label" style="color:${clr}">${pct}%</div>
+      </div></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tableUpdated').textContent=new Date().toLocaleTimeString();
+}
+
+function renderTimeline(){
+  const steps=[
+    {key:'phase_impl',icon:'⚙️',state:'tl-active'},
+    {key:'phase_pilot',icon:'🧪',state:'tl-active'},
+    {key:'phase_support',icon:'🛡️',state:'tl-active'},
+    {key:'phase_done',icon:'✅',state:'tl-upcoming'},
+  ];
+  document.getElementById('timeline').innerHTML=steps.map((s,i)=>`
+    <div class="tl-item">
+      <div class="tl-dot ${s.state}">${s.icon}</div>
+      <div class="tl-label">${t(s.key)}</div>
+      <div class="tl-sub">${data.phases[i].count} props</div>
+    </div>
+  `).join('');
+}
+
+function renderAll(){renderKPIs();renderPhaseCards();renderModules();renderTimeline();}
+
+// ── SUPABASE ───────────────────────────────────────────────────────
+let sb=null,sbChannel=null;
+
+async function connectSupabase(){
+  const url=document.getElementById('sbUrl').value.trim();
+  const key=document.getElementById('sbKey').value.trim();
+  if(!url||!key){showToast('Ingresa URL y API Key','error');return;}
+  try{
+    if(!window.supabase){
+      await new Promise((res,rej)=>{
+        const s=document.createElement('script');
+        s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+        s.onload=res;s.onerror=rej;document.head.appendChild(s);
+      });
+    }
+    sb=window.supabase.createClient(url,key);
+    const {error}=await sb.from('properties').select('id',{count:'exact',head:true});
+    if(error)throw error;
+    localStorage.setItem('dn_sb_url',url);localStorage.setItem('dn_sb_key',key);
+    document.getElementById('configBanner').style.display='none';
+    showToast(t('connected'),'success');
+    startRealtime();fetchData();
+  }catch(e){showToast('Error: '+e.message,'error');}
+}
+
+async function fetchData(){
+  if(!sb)return;
+  try{
+    const{data:props}=await sb.from('properties').select('*');
+    if(props){
+      ['implementation','pilot','support','done'].forEach((ph,i)=>{
+        data.phases[i].count=props.filter(p=>p.phase===ph).length;
+      });
+    }
+    const{count}=await sb.from('users').select('id',{count:'exact',head:true});
+    if(count!==null)data.users.total=count;
+    data.lastUpdated=new Date();save();renderAll();
+  }catch(e){console.error(e);}
+}
+
+function startRealtime(){
+  if(!sb)return;
+  sbChannel=sb.channel('dn-rt')
+    .on('postgres_changes',{event:'*',schema:'public',table:'properties'},()=>{fetchData();showToast(t('refreshed'),'success');})
+    .on('postgres_changes',{event:'*',schema:'public',table:'users'},()=>fetchData())
+    .subscribe();
+}
+
+// ── DEMO MODE ──────────────────────────────────────────────────────
+function loadDemoData(){
+  document.getElementById('configBanner').style.display='none';
+  // Animate KPIs
+  const targets={kpiTotal:28,kpiImpl:12,kpiPilot:8,kpiSupport:5};
+  Object.entries(targets).forEach(([id,val])=>animateNum(id,0,val,900));
+  animateNum2('totalUsers',0,4287,1200);
+  data.lastUpdated=new Date();save();
+  setTimeout(renderAll,50);
+  showToast(t('demo_mode'),'success');
+  // Simulate live updates
+  setInterval(()=>{
+    const d=Math.floor(Math.random()*7)-3;
+    data.users.total=Math.max(4200,data.users.total+d);
+    data.lastUpdated=new Date();
+    document.getElementById('totalUsers').textContent=data.users.total.toLocaleString();
+    document.getElementById('lastUpdatedText').textContent=data.lastUpdated.toLocaleTimeString();
+    save();
+  },6000);
+}
+
+function animateNum(id,from,to,dur){
+  const el=document.getElementById(id);
+  const start=performance.now();
+  (function go(t){
+    const p=Math.min((t-start)/dur,1);
+    el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-p,3)));
+    if(p<1)requestAnimationFrame(go);
+  })(performance.now());
+}
+function animateNum2(id,from,to,dur){
+  const el=document.getElementById(id);
+  const start=performance.now();
+  (function go(t){
+    const p=Math.min((t-start)/dur,1);
+    el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-p,3))).toLocaleString();
+    if(p<1)requestAnimationFrame(go);
+  })(performance.now());
+}
+
+function refreshData(){
+  const btn=document.getElementById('refreshBtn');
+  btn.classList.add('spin');
+  if(sb){fetchData().finally(()=>{btn.classList.remove('spin');showToast(t('refreshed'),'success');});}
+  else{setTimeout(()=>{data.lastUpdated=new Date();renderAll();save();btn.classList.remove('spin');showToast(t('refreshed'),'success');},700);}
+}
+
+// ── TOAST ──────────────────────────────────────────────────────────
+function showToast(msg,type=''){
+  const c=document.getElementById('toastContainer');
+  const el=document.createElement('div');
+  el.className=`toast${type?` toast-${type}`:''}`;
+  el.textContent=msg;c.appendChild(el);
+  setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(40px)';setTimeout(()=>el.remove(),350);},3000);
+}
+
+// ── INIT ───────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(theme==='dark')document.getElementById('themeBtn').textContent='☀️';
+  const savedUrl=localStorage.getItem('dn_sb_url');
+  const savedKey=localStorage.getItem('dn_sb_key');
+  if(savedUrl&&savedKey){document.getElementById('sbUrl').value=savedUrl;document.getElementById('sbKey').value=savedKey;}
+  applyI18n();
+  renderAll();
+  if(savedUrl&&savedKey){
+    try{
+      if(!window.supabase)await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+      sb=window.supabase.createClient(savedUrl,savedKey);
+      document.getElementById('configBanner').style.display='none';
+      startRealtime();fetchData();
+    }catch(e){}
+  }
+});
+</script>
+</body>
+</html>
