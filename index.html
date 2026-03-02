@@ -4,153 +4,233 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DomoNow – Dashboard de Implementación</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
 :root {
-  --domo: #820ad1; --domo-70: #a34dde; --domo-30: #ddb3f3;
-  --horizonte: #F7B500; --horizonte-50: #fbd980;
-  --black: #1A1A1A; --neutral: #F2F2F2;
-  --bg: #f7f7fb; --surface: #ffffff; --surface2: #f0eef8;
-  --border: #e4e0f0; --text: #1A1A1A; --text-muted: #6b6b7b;
-  --shadow: 0 2px 12px rgba(130,10,209,.08);
-  --shadow-md: 0 4px 24px rgba(130,10,209,.13);
-  --radius: 16px; --radius-sm: 10px;
+  --domo:#820ad1;--domo-70:#a34dde;--domo-30:#ddb3f3;
+  --gold:#F7B500;
+  --bg:#f4f3fa;--surface:#fff;--surface2:#f0edf8;--surface3:#e8e3f5;
+  --border:#e0d9f5;--text:#16122a;--text-muted:#7c6fa0;
+  --shadow:0 2px 14px rgba(130,10,209,.07);
+  --shadow-md:0 6px 30px rgba(130,10,209,.13);
+  --radius:18px;--radius-sm:10px;
+  --green:#00b460;--blue:#0088cc;--orange:#e67e00;--red:#e03030;
 }
-[data-theme="dark"] {
-  --bg: #0e0a18; --surface: #1a1228; --surface2: #241a38;
-  --border: #352850; --text: #f0eef8; --text-muted: #a09ab8;
-  --shadow: 0 2px 12px rgba(0,0,0,.4); --shadow-md: 0 4px 24px rgba(0,0,0,.5);
+[data-theme="dark"]{
+  --bg:#0d0a1a;--surface:#15102a;--surface2:#1e1838;--surface3:#261e46;
+  --border:#2d2448;--text:#ede9ff;--text-muted:#9287b8;
+  --shadow:0 2px 14px rgba(0,0,0,.4);--shadow-md:0 6px 30px rgba(0,0,0,.5);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;overflow-x:hidden}
 
 /* SIDEBAR */
-.sidebar{position:fixed;top:0;left:0;width:240px;height:100vh;background:linear-gradient(160deg,var(--domo) 0%,#5a0899 100%);display:flex;flex-direction:column;z-index:100;padding:0 0 24px;box-shadow:4px 0 24px rgba(130,10,209,.3)}
-.sidebar-logo{padding:28px 24px 24px;border-bottom:1px solid rgba(255,255,255,.15)}
-.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none}
-.logo-text{font-size:20px;font-weight:700;color:#fff}.logo-text span{color:var(--horizonte)}
-.sidebar-nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius-sm);color:rgba(255,255,255,.75);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
-.nav-item:hover,.nav-item.active{background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.2)}
-.nav-item.active{background:rgba(247,181,0,.2);border-color:rgba(247,181,0,.4);color:var(--horizonte)}
-.sidebar-version{font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-top:12px;padding:0 16px}
+.sidebar{position:fixed;top:0;left:0;width:230px;height:100vh;background:linear-gradient(170deg,#5a0899 0%,#820ad1 55%,#a020d0 100%);display:flex;flex-direction:column;z-index:100;box-shadow:6px 0 30px rgba(130,10,209,.25)}
+.sidebar-logo{padding:26px 22px 20px;border-bottom:1px solid rgba(255,255,255,.12)}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-icon{width:38px;height:38px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;backdrop-filter:blur(4px)}
+.logo-text{font-size:19px;font-weight:800;color:#fff;letter-spacing:-.3px}.logo-text span{color:var(--gold)}
+.sidebar-greeting{padding:14px 20px 6px;font-size:11px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.8px}
+.greeting-name{font-size:14px;font-weight:700;color:#fff;padding:0 20px 16px;line-height:1.3}
+.sidebar-date{padding:0 20px 14px;font-size:11px;color:rgba(255,255,255,.55);font-family:'JetBrains Mono',monospace}
+.sidebar-sep{height:1px;background:rgba(255,255,255,.1);margin:0 20px 10px}
+.sidebar-nav{flex:1;padding:6px 12px;display:flex;flex-direction:column;gap:3px;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:10px;color:rgba(255,255,255,.7);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;border:1px solid transparent;user-select:none}
+.nav-item:hover{background:rgba(255,255,255,.12);color:#fff}
+.nav-item.active{background:rgba(247,181,0,.18);border-color:rgba(247,181,0,.35);color:var(--gold);font-weight:700}
+.nav-icon{font-size:16px;width:22px;text-align:center}
+.sidebar-bottom{padding:16px 20px;border-top:1px solid rgba(255,255,255,.1)}
+.sidebar-version{font-size:10px;color:rgba(255,255,255,.3);font-family:'JetBrains Mono',monospace}
 
 /* TOPBAR */
-.topbar{position:fixed;top:0;left:240px;right:0;height:64px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:99;box-shadow:var(--shadow);transition:background .3s}
-.topbar-title{font-size:16px;font-weight:700}.topbar-title span{color:var(--domo)}
-.topbar-actions{display:flex;align-items:center;gap:12px}
-.btn-icon{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;color:var(--text-muted);font-size:16px}
+.topbar{position:fixed;top:0;left:230px;right:0;height:62px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 26px;z-index:99;box-shadow:var(--shadow)}
+.topbar-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:10px}
+.topbar-title span{color:var(--domo)}
+.topbar-actions{display:flex;align-items:center;gap:8px}
+.btn-icon{width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:15px;color:var(--text-muted)}
 .btn-icon:hover{border-color:var(--domo);color:var(--domo)}
-.lang-btn{padding:6px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;cursor:pointer;color:var(--text);transition:all .2s}
-.lang-btn:hover{border-color:var(--domo);color:var(--domo)}
-.realtime-badge{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:rgba(0,200,100,.1);border:1px solid rgba(0,200,100,.3);font-size:11px;font-weight:600;color:#00b460}
+.lang-sel{padding:5px 10px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;color:var(--text);outline:none;transition:border .2s}
+.lang-sel:focus{border-color:var(--domo)}
+.realtime-badge{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:rgba(0,200,100,.08);border:1px solid rgba(0,200,100,.25);font-size:11px;font-weight:600;color:#00b460}
 .realtime-dot{width:7px;height:7px;border-radius:50%;background:#00b460;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.realtime-badge.off{background:rgba(220,50,50,.08);border-color:rgba(220,50,50,.25);color:#e03030}
+.realtime-badge.off .realtime-dot{background:#e03030;animation:none}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+.topbar-clock{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:9px}
 
 /* MAIN */
-.main{margin-left:240px;padding-top:64px;min-height:100vh}
-.content{padding:28px}
+.main{margin-left:230px;padding-top:62px;min-height:100vh}
+.content{padding:26px}
 
-/* KPI */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:28px}
-.kpi-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:20px 22px;box-shadow:var(--shadow);transition:all .3s;position:relative;overflow:hidden;cursor:default}
-.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kpi-color,var(--domo))}
-.kpi-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
-.kpi-label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
-.kpi-value{font-size:32px;font-weight:700;line-height:1;margin-bottom:6px}
-.kpi-sub{font-size:12px;color:var(--text-muted)}
-.kpi-icon{position:absolute;right:18px;top:18px;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--kpi-bg,rgba(130,10,209,.1));color:var(--kpi-color,var(--domo));font-size:20px}
+/* CONNECT */
+.connect-wrap{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 62px);padding:30px}
+.connect-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-md);padding:44px;max-width:580px;width:100%}
+.connect-icon{font-size:52px;margin-bottom:14px;text-align:center}
+.connect-title{font-size:22px;font-weight:800;text-align:center;margin-bottom:6px}
+.connect-sub{font-size:13px;color:var(--text-muted);text-align:center;line-height:1.6;margin-bottom:28px}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.6px}
+.form-input,.form-select,.form-textarea{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);font-family:'Outfit',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border .2s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--domo);background:var(--surface)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-textarea{resize:vertical;min-height:70px}
+.form-hint{font-size:11px;color:var(--text-muted);margin-top:4px}
 
-/* CONFIG */
-.config-banner{background:linear-gradient(135deg,rgba(130,10,209,.08) 0%,rgba(247,181,0,.08) 100%);border:1px dashed var(--domo-70);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.config-inputs{display:flex;gap:12px;flex:1;flex-wrap:wrap}
-.config-input{flex:1;min-width:220px;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);font-family:'Montserrat',sans-serif;font-size:12px;color:var(--text);outline:none;transition:border .2s}
-.config-input:focus{border-color:var(--domo)}
-.btn-primary{padding:10px 20px;border-radius:var(--radius-sm);background:var(--domo);color:#fff;border:none;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+/* BUTTONS */
+.btn-primary{padding:11px 22px;border-radius:10px;background:var(--domo);color:#fff;border:none;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
 .btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.btn-secondary{padding:10px 20px;border-radius:var(--radius-sm);background:var(--horizonte);color:#1A1A1A;border:none;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
-.btn-secondary:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-outline{padding:11px 22px;border-radius:10px;background:transparent;color:var(--domo);border:1.5px solid var(--domo);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-outline:hover{background:var(--domo);color:#fff}
+.btn-sm{padding:7px 14px;font-size:12px}
+.btn-edit{padding:5px 11px;border-radius:7px;background:rgba(130,10,209,.08);color:var(--domo);border:1px solid rgba(130,10,209,.2);font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-edit:hover{background:var(--domo);color:#fff}
+.btn-del{padding:5px 11px;border-radius:7px;background:rgba(220,50,50,.07);color:#e03030;border:1px solid rgba(220,50,50,.18);font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-del:hover{background:#e03030;color:#fff}
 
-/* SECTION */
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.section-title{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
-.section-title::before{content:'';width:4px;height:18px;border-radius:2px;background:var(--domo);display:block}
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:all .25s}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc)}
+.kpi-label{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.9px;margin-bottom:8px}
+.kpi-value{font-size:30px;font-weight:800;line-height:1;margin-bottom:5px}
+.kpi-sub{font-size:11px;color:var(--text-muted)}
+.kpi-icon{position:absolute;right:16px;top:16px;width:38px;height:38px;border-radius:9px;background:var(--kbg);display:flex;align-items:center;justify-content:center;font-size:18px}
+.kpi-vs{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;margin-top:5px}
+.kpi-vs.up{color:#00b460}.kpi-vs.down{color:#e03030}.kpi-vs.neutral{color:var(--text-muted)}
 
-/* USERS WIDGET */
-.users-widget{background:linear-gradient(135deg,var(--domo) 0%,#5a0899 100%);border-radius:var(--radius);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;box-shadow:0 8px 32px rgba(130,10,209,.3);flex-wrap:wrap;gap:16px}
-.users-label{font-size:12px;font-weight:600;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.8px}
-.users-count{font-size:48px;font-weight:700;color:#fff;line-height:1}
-.users-sub{font-size:13px;color:rgba(255,255,255,.65);font-weight:500;margin-top:4px}
-.users-breakdown{display:flex;gap:24px}
-.users-item{display:flex;flex-direction:column;align-items:center;gap:4px}
-.users-item-val{font-size:22px;font-weight:700;color:#fff}
-.users-item-label{font-size:11px;color:rgba(255,255,255,.6);font-weight:500}
-.users-icon{width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:32px}
+/* WEEK COMPARE */
+.week-compare{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);padding:20px 24px;margin-bottom:24px}
+.wc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.wc-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.wc-title::before{content:'';width:4px;height:16px;border-radius:2px;background:var(--domo);display:block}
+.wc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.wc-item{background:var(--surface2);border-radius:12px;padding:14px 16px;border:1px solid var(--border)}
+.wc-mod{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.wc-vals{display:flex;align-items:flex-end;gap:10px}
+.wc-cur{font-size:24px;font-weight:800;color:var(--domo)}
+.wc-prev{font-size:13px;color:var(--text-muted);margin-bottom:2px}
+.wc-delta{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
+.wc-delta.up{background:rgba(0,180,100,.12);color:#00b460}
+.wc-delta.down{background:rgba(224,48,48,.1);color:#e03030}
+.wc-delta.eq{background:var(--surface3);color:var(--text-muted)}
 
 /* PHASES */
-.phases-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:28px}
-.phase-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);transition:all .3s}
-.phase-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.phase-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-.phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.phase-name{font-size:14px;font-weight:700;margin-left:10px}
-.phase-count{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
-.phase-days{font-size:11px;color:var(--text-muted);font-weight:500}
-.phase-body{padding:16px 20px}
-.phase-pct{font-size:14px;font-weight:700}
-.progress-track{width:100%;height:8px;border-radius:4px;background:var(--surface2);margin-bottom:16px;overflow:hidden}
-.progress-fill{height:100%;border-radius:4px;transition:width 1s cubic-bezier(.4,0,.2,1)}
-.modules-mini{display:flex;flex-wrap:wrap;gap:6px}
-.module-chip{font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--text-muted);background:var(--surface2)}
-.chip-done{background:rgba(0,180,100,.1);border-color:rgba(0,180,100,.3);color:#00a857}
-.chip-pending{background:rgba(130,10,209,.07);border-color:rgba(130,10,209,.2);color:var(--domo)}
+.phases-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.phase-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);transition:all .25s}
+.phase-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.phase-header{padding:13px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.phase-dot{width:9px;height:9px;border-radius:50%}
+.phase-name{font-size:12px;font-weight:700;margin-left:7px}
+.phase-count{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.phase-body{padding:14px 16px}
+.phase-pct{font-size:22px;font-weight:800}
+.progress-track{width:100%;height:5px;border-radius:3px;background:var(--surface2);margin:7px 0;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.phase-days{font-size:11px;color:var(--text-muted)}
+
+/* MODULE METER */
+.section-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;margin-bottom:14px}
+.section-title::before{content:'';width:4px;height:16px;border-radius:2px;background:var(--domo);display:block}
+.module-meters{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+.mod-meter{background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:16px 18px;box-shadow:var(--shadow)}
+.mm-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mm-name{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700}
+.mm-icon{font-size:18px}
+.mm-pct{font-size:18px;font-weight:800}
+.mm-bar-wrap{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.mm-bar{flex:1;height:7px;border-radius:4px;background:var(--surface2);overflow:hidden}
+.mm-fill{height:100%;border-radius:4px;transition:width 1s ease}
+.mm-target{font-size:10px;color:var(--text-muted)}
+.mm-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted)}
+
+/* CHARTS */
+.charts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px}
+.chart-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden}
+.chart-header{padding:16px 20px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.chart-header .section-title{margin-bottom:0}
+.chart-body{padding:14px 18px 18px;height:250px;position:relative}
+.chart-full{grid-column:1/-1}
+.chart-tall{height:340px}
 
 /* TABLE */
-.table-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;margin-bottom:28px}
-.table-header{padding:18px 22px;border-bottom:1px solid var(--border)}
+.table-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;margin-bottom:24px}
+.table-topbar{padding:15px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.table-search{padding:8px 13px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);font-family:'Outfit',sans-serif;font-size:12px;color:var(--text);outline:none;width:200px;transition:border .2s}
+.table-search:focus{border-color:var(--domo)}
+.filter-tabs{display:flex;gap:5px;flex-wrap:wrap}
+.filter-tab{padding:6px 13px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:all .2s}
+.filter-tab:hover{border-color:var(--domo);color:var(--domo)}
+.filter-tab.active{background:var(--domo);color:#fff;border-color:var(--domo)}
 table{width:100%;border-collapse:collapse}
-th{padding:12px 16px;text-align:left;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;background:var(--surface2);border-bottom:1px solid var(--border)}
-td{padding:13px 16px;font-size:13px;border-bottom:1px solid var(--border);transition:background .2s;font-weight:500}
+th{padding:10px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:11px 14px;font-size:12px;border-bottom:1px solid var(--border);font-weight:500;vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--surface2)}
-.mod-cell{display:flex;align-items:center;gap:10px;font-weight:600}
-.mod-badge{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--domo) 0%,var(--domo-70) 100%);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;flex-shrink:0}
-.pill{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
-.pill-p{background:rgba(130,10,209,.1);color:var(--domo)}
-.pill-pi{background:rgba(247,181,0,.15);color:#c48a00}
-.pill-s{background:rgba(0,180,100,.1);color:#00a857}
-.pill-pe{background:var(--surface2);color:var(--text-muted);border:1px solid var(--border)}
-.bar-cell{display:flex;align-items:center;gap:10px}
-.mini-bar{flex:1;height:6px;border-radius:3px;background:var(--surface2);overflow:hidden;min-width:60px}
+.pill{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.pill-impl{background:rgba(130,10,209,.1);color:#820ad1}
+.pill-pilot{background:rgba(247,181,0,.15);color:#b87e00}
+.pill-support{background:rgba(0,180,100,.1);color:#00a857}
+.pill-done{background:rgba(0,136,204,.1);color:#0088cc}
+.pill-pending{background:var(--surface2);color:var(--text-muted)}
+.bar-cell{display:flex;align-items:center;gap:7px}
+.mini-bar{flex:1;height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;min-width:40px}
 .mini-fill{height:100%;border-radius:3px;transition:width 1s ease}
-.pct-label{font-size:12px;font-weight:700;min-width:34px;text-align:right}
+.pct-label{font-size:11px;font-weight:700;min-width:32px;text-align:right}
+.actions-cell{display:flex;gap:5px}
+.empty-state{padding:44px;text-align:center;color:var(--text-muted);font-size:13px}
 
-/* TIMELINE */
-.timeline-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);padding:20px 22px;margin-bottom:28px}
-.timeline{display:flex;position:relative;margin-top:20px}
-.timeline::before{content:'';position:absolute;top:20px;left:10%;right:10%;height:2px;background:var(--border);z-index:0}
-.tl-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;z-index:1}
-.tl-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;border:3px solid var(--bg);transition:all .3s}
-.tl-active{background:var(--domo);box-shadow:0 0 0 4px rgba(130,10,209,.2)}
-.tl-done{background:#00b460}
-.tl-upcoming{background:var(--surface2);border:2px solid var(--border)}
-.tl-label{font-size:11px;font-weight:600;text-align:center}
-.tl-sub{font-size:10px;color:var(--text-muted);text-align:center}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px)}
+.modal{background:var(--surface);border-radius:var(--radius);box-shadow:0 24px 64px rgba(0,0,0,.3);width:100%;max-width:540px;max-height:90vh;overflow-y:auto;animation:mIn .3s ease}
+@keyframes mIn{from{opacity:0;transform:scale(.95) translateY(18px)}to{opacity:1;transform:none}}
+.modal-header{padding:22px 26px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-size:15px;font-weight:800}
+.modal-close{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-muted);transition:all .2s}
+.modal-close:hover{border-color:var(--red);color:var(--red)}
+.modal-body{padding:22px 26px}
+.modal-footer{padding:14px 26px 22px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border)}
+.modules-check-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:5px}
+.module-check{display:flex;align-items:center;gap:7px;padding:7px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;transition:all .2s;font-size:12px;font-weight:500}
+.module-check:hover{border-color:var(--domo)}
+.module-check input{accent-color:var(--domo);width:13px;height:13px;cursor:pointer}
+.module-check.checked{border-color:var(--domo);background:rgba(130,10,209,.07);color:var(--domo)}
+
+/* SETTINGS */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.settings-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);padding:22px 24px}
+.settings-card.full{grid-column:1/-1}
+.settings-section{font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.settings-section::before{content:'';width:4px;height:14px;border-radius:2px;background:var(--domo);display:block}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-size:13px;font-weight:600}
+.setting-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+.setting-input{padding:6px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);font-family:'Outfit',sans-serif;font-size:13px;color:var(--text);outline:none;width:120px;transition:border .2s}
+.setting-input:focus{border-color:var(--domo)}
+.toggle{position:relative;width:42px;height:24px}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--surface3);border-radius:24px;transition:.3s}
+.toggle-slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+.toggle input:checked + .toggle-slider{background:var(--domo)}
+.toggle input:checked + .toggle-slider:before{transform:translateX(18px)}
 
 /* TOAST */
-.toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
-.toast{padding:12px 20px;border-radius:12px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-md);font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;animation:slideIn .3s ease;max-width:320px;color:var(--text);transition:opacity .3s,transform .3s}
-.toast-success{border-color:rgba(0,180,100,.4);background:rgba(0,180,100,.05);color:#00a857}
-.toast-error{border-color:rgba(220,50,50,.4);background:rgba(220,50,50,.05);color:#dc3232}
-@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
-.spin{animation:spinning 1s linear infinite}
-@keyframes spinning{to{transform:rotate(360deg)}}
-.fade-in{animation:fadeIn .5s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.last-updated{font-size:11px;color:var(--text-muted)}
+.toast-wrap{position:fixed;bottom:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:7px}
+.toast{padding:11px 18px;border-radius:11px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-md);font-size:12px;font-weight:600;animation:tIn .3s ease;max-width:300px}
+.toast-success{border-color:rgba(0,180,100,.35);background:rgba(0,180,100,.05);color:#00a857}
+.toast-error{border-color:rgba(220,50,50,.35);background:rgba(220,50,50,.05);color:#e03030}
+@keyframes tIn{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:none}}
+.fade-in{animation:fIn .4s ease}
+@keyframes fIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--domo);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:60px;color:var(--text-muted);font-size:13px}
 
-@media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.phases-grid{grid-template-columns:1fr}}
-@media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0}.kpi-grid{grid-template-columns:1fr}.users-breakdown{display:none}}
+@media(max-width:1200px){.charts-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.phases-grid{grid-template-columns:repeat(2,1fr)}.settings-grid{grid-template-columns:1fr}.module-meters{grid-template-columns:1fr}}
+@media(max-width:768px){.sidebar{transform:translateX(-100%)}.topbar{left:0}.main{margin-left:0}.kpi-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.wc-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body data-theme="light">
@@ -158,30 +238,40 @@ tr:hover td{background:var(--surface2)}
 <aside class="sidebar">
   <div class="sidebar-logo">
     <div class="logo-wrap">
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <path d="M18 4L32 16V32H22V22H14V32H4V16L18 4Z" fill="white" fill-opacity="0.9"/>
-        <rect x="15" y="14" width="6" height="5" rx="1" fill="#F7B500"/>
-      </svg>
+      <div class="logo-icon">🏘️</div>
       <span class="logo-text">Domo<span>Now</span></span>
     </div>
   </div>
+  <div class="sidebar-greeting" id="greetingLabel">Buenos días</div>
+  <div class="greeting-name" id="greetingText"></div>
+  <div class="sidebar-date" id="sidebarDate"></div>
+  <div class="sidebar-sep"></div>
   <nav class="sidebar-nav">
-    <a href="#" class="nav-item active"><span style="font-size:16px">⊞</span> <span data-i18n="nav_dashboard">Dashboard</span></a>
-    <a href="#" class="nav-item"><span style="font-size:16px">🏢</span> <span data-i18n="nav_properties">Propiedades</span></a>
-    <a href="#" class="nav-item"><span style="font-size:16px">🧩</span> <span data-i18n="nav_modules">Módulos</span></a>
-    <a href="#" class="nav-item"><span style="font-size:16px">👥</span> <span data-i18n="nav_users">Usuarios</span></a>
-    <a href="#" class="nav-item"><span style="font-size:16px">📊</span> <span data-i18n="nav_reports">Reportes</span></a>
-    <a href="#" class="nav-item"><span style="font-size:16px">⚙️</span> <span data-i18n="nav_settings">Configuración</span></a>
+    <div class="nav-item active" onclick="showSection('dashboard',this)"><span class="nav-icon">📊</span> <span data-i="nav_dashboard">Dashboard</span></div>
+    <div class="nav-item" onclick="showSection('properties',this)"><span class="nav-icon">🏢</span> <span data-i="nav_props">Propiedades</span></div>
+    <div class="nav-item" onclick="showSection('modules',this)"><span class="nav-icon">🧩</span> <span data-i="nav_modules">Módulos</span></div>
+    <div class="nav-item" onclick="showSection('charts',this)"><span class="nav-icon">📈</span> <span data-i="nav_charts">Gráficas</span></div>
+    <div class="nav-item" onclick="showSection('settings',this)"><span class="nav-icon">⚙️</span> <span data-i="nav_settings">Configuración</span></div>
   </nav>
-  <div class="sidebar-version">DomoNow v2.0 · 2025</div>
+  <div class="sidebar-bottom">
+    <div class="sidebar-version">DomoNow v2.2 · 2025</div>
+  </div>
 </aside>
 
 <header class="topbar">
-  <div class="topbar-title" data-i18n="page_title">Panel de <span>Implementación</span></div>
+  <div class="topbar-title"><span data-i="topbar_title">Panel de</span> <span data-i="topbar_impl">Implementación</span></div>
   <div class="topbar-actions">
-    <div class="realtime-badge"><div class="realtime-dot"></div><span data-i18n="realtime">Tiempo Real</span></div>
-    <div class="last-updated">🕐 <span id="lastUpdatedText">--</span></div>
-    <button class="lang-btn" id="langBtn" onclick="toggleLang()">EN</button>
+    <div class="realtime-badge off" id="realtimeBadge">
+      <div class="realtime-dot"></div>
+      <span id="realtimeText" data-i="no_conn">Sin conexión</span>
+    </div>
+    <div class="topbar-clock" id="topbarClock">--:--:--</div>
+    <select class="lang-sel" id="langSel" onchange="setLang(this.value)">
+      <option value="es">🇨🇴 Español</option>
+      <option value="en">🇺🇸 English</option>
+      <option value="pt">🇧🇷 Português</option>
+      <option value="ja">🇯🇵 日本語</option>
+    </select>
     <div class="btn-icon" onclick="toggleTheme()" id="themeBtn" title="Tema">🌙</div>
     <div class="btn-icon" onclick="refreshData()" id="refreshBtn" title="Actualizar">↻</div>
   </div>
@@ -190,395 +280,1141 @@ tr:hover td{background:var(--surface2)}
 <main class="main">
   <div class="content">
 
-    <div class="config-banner fade-in" id="configBanner">
-      <div style="font-size:28px">🔗</div>
-      <div style="flex:1">
-        <div style="font-size:13px;font-weight:700;margin-bottom:4px" data-i18n="connect_supabase">Conectar con Supabase</div>
-        <div style="font-size:11px;color:var(--text-muted)" data-i18n="connect_desc">Ingresa tus credenciales para sincronización en tiempo real</div>
-      </div>
-      <div class="config-inputs">
-        <input class="config-input" id="sbUrl" placeholder="https://tu-proyecto.supabase.co" />
-        <input class="config-input" id="sbKey" placeholder="anon-public-key" type="password" />
-        <button class="btn-primary" onclick="connectSupabase()" data-i18n="btn_connect">Conectar</button>
-        <button class="btn-secondary" onclick="loadDemoData()" data-i18n="btn_demo">Demo</button>
-      </div>
-    </div>
-
-    <div class="kpi-grid fade-in">
-      <div class="kpi-card" style="--kpi-color:#820ad1;--kpi-bg:rgba(130,10,209,.1)">
-        <div class="kpi-icon">🏘️</div>
-        <div class="kpi-label" data-i18n="kpi_total">Total Propiedades</div>
-        <div class="kpi-value" id="kpiTotal">0</div>
-        <div class="kpi-sub" data-i18n="kpi_total_sub">En plataforma</div>
-      </div>
-      <div class="kpi-card" style="--kpi-color:#e67e00;--kpi-bg:rgba(247,181,0,.12)">
-        <div class="kpi-icon">⚙️</div>
-        <div class="kpi-label" data-i18n="kpi_impl">En Implementación</div>
-        <div class="kpi-value" id="kpiImpl">0</div>
-        <div class="kpi-sub">⏱ <span id="kpiImplDays">0</span> <span data-i18n="days_avg">días promedio</span></div>
-      </div>
-      <div class="kpi-card" style="--kpi-color:#0088cc;--kpi-bg:rgba(0,136,204,.1)">
-        <div class="kpi-icon">🧪</div>
-        <div class="kpi-label" data-i18n="kpi_pilot">Piloto</div>
-        <div class="kpi-value" id="kpiPilot">0</div>
-        <div class="kpi-sub">⏱ <span id="kpiPilotDays">0</span> <span data-i18n="days_avg">días promedio</span></div>
-      </div>
-      <div class="kpi-card" style="--kpi-color:#00b460;--kpi-bg:rgba(0,180,100,.1)">
-        <div class="kpi-icon">🛡️</div>
-        <div class="kpi-label" data-i18n="kpi_support">Soporte Continuo</div>
-        <div class="kpi-value" id="kpiSupport">0</div>
-        <div class="kpi-sub">⏱ <span id="kpiSupportDays">0</span> <span data-i18n="days_avg">días promedio</span></div>
+    <!-- CONNECT -->
+    <div id="sec-connect">
+      <div class="connect-wrap">
+        <div class="connect-card fade-in">
+          <div class="connect-icon">🔗</div>
+          <div class="connect-title" data-i="conn_title">Conectar con Supabase</div>
+          <div class="connect-sub" data-i="conn_sub">Ingresa las credenciales de tu proyecto Supabase para visualizar y gestionar los datos de implementación en tiempo real.</div>
+          <div class="form-group">
+            <label class="form-label">Project URL</label>
+            <input class="form-input" id="sbUrl" type="text" placeholder="https://xyzabc.supabase.co"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Anon Public Key</label>
+            <input class="form-input" id="sbKey" type="password" placeholder="eyJhbGciOiJIUzI1NiIs..."/>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:8px">
+            <button class="btn-primary" id="btnConnect" onclick="connectSupabase()" style="flex:1" data-i="btn_connect">Conectar →</button>
+            <button class="btn-outline" onclick="useDemoData()" data-i="btn_demo">Demo</button>
+          </div>
+          <div style="margin-top:18px;padding:14px;border-radius:10px;background:var(--surface2);font-size:11px;color:var(--text-muted);line-height:1.9">
+            <strong style="color:var(--text)">Tablas requeridas:</strong><br>
+            📋 <code>properties</code> — name, city, phase, days_elapsed, units, active_modules[], notes, week_data (JSON)<br>
+            🗓️ <code>activity_log</code> — property_id, module, count, week_start (DATE)
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="users-widget fade-in">
-      <div>
-        <div class="users-label" data-i18n="users_label">Usuarios Registrados</div>
-        <div class="users-count" id="totalUsers">0</div>
-        <div class="users-sub" data-i18n="users_sub">Total en la plataforma · actualizado en tiempo real</div>
+    <!-- DASHBOARD -->
+    <div id="sec-dashboard" style="display:none" class="fade-in">
+      <div class="kpi-grid">
+        <div class="kpi-card" style="--kc:#820ad1;--kbg:rgba(130,10,209,.1)">
+          <div class="kpi-icon">🏘️</div>
+          <div class="kpi-label" data-i="kpi_total">Total Propiedades</div>
+          <div class="kpi-value" id="kpiTotal">0</div>
+          <div class="kpi-sub" data-i="kpi_total_sub">En plataforma</div>
+          <div class="kpi-vs neutral" id="kpiTotalVs">—</div>
+        </div>
+        <div class="kpi-card" style="--kc:#e67e00;--kbg:rgba(247,181,0,.12)">
+          <div class="kpi-icon">⚙️</div>
+          <div class="kpi-label" data-i="kpi_impl">En Implementación</div>
+          <div class="kpi-value" id="kpiImpl">0</div>
+          <div class="kpi-sub">⏱ Prom. <span id="kpiImplDays">0</span> días</div>
+        </div>
+        <div class="kpi-card" style="--kc:#0088cc;--kbg:rgba(0,136,204,.1)">
+          <div class="kpi-icon">🧪</div>
+          <div class="kpi-label" data-i="kpi_pilot">Piloto</div>
+          <div class="kpi-value" id="kpiPilot">0</div>
+          <div class="kpi-sub">⏱ Prom. <span id="kpiPilotDays">0</span> días</div>
+        </div>
+        <div class="kpi-card" style="--kc:#00b460;--kbg:rgba(0,180,100,.1)">
+          <div class="kpi-icon">🛡️</div>
+          <div class="kpi-label" data-i="kpi_support">Soporte Continuo</div>
+          <div class="kpi-value" id="kpiSupport">0</div>
+          <div class="kpi-sub">⏱ Prom. <span id="kpiSupportDays">0</span> días</div>
+        </div>
       </div>
-      <div class="users-breakdown">
-        <div class="users-item"><div class="users-item-val" id="usersAdmin">0</div><div class="users-item-label" data-i18n="users_admin">Administradores</div></div>
-        <div class="users-item"><div class="users-item-val" id="usersResident">0</div><div class="users-item-label" data-i18n="users_residents">Residentes</div></div>
-        <div class="users-item"><div class="users-item-val" id="usersStaff">0</div><div class="users-item-label" data-i18n="users_staff">Staff</div></div>
+
+      <div class="week-compare fade-in">
+        <div class="wc-header">
+          <div class="wc-title" data-i="wc_title">Esta semana vs semana pasada</div>
+          <div style="font-size:11px;color:var(--text-muted)" id="wcDateRange"></div>
+        </div>
+        <div class="wc-grid" id="wcGrid"></div>
       </div>
-      <div class="users-icon">👥</div>
+
+      <div class="section-title" data-i="sec_phases">Progreso por Fase</div>
+      <div class="phases-grid" id="phasesGrid"></div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header"><div class="section-title" data-i="chart_phase">Propiedades por Fase</div></div>
+          <div class="chart-body"><canvas id="chartPhase"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><div class="section-title" data-i="chart_modules">Adopción de Módulos</div></div>
+          <div class="chart-body"><canvas id="chartModules"></canvas></div>
+        </div>
+        <div class="chart-card chart-full">
+          <div class="chart-header"><div class="section-title" data-i="chart_props">Progreso por Propiedad</div></div>
+          <div class="chart-body chart-tall"><canvas id="chartProps"></canvas></div>
+        </div>
+      </div>
     </div>
 
-    <div class="section-header">
-      <div class="section-title" data-i18n="phases_title">Progreso por Fase</div>
-    </div>
-    <div class="phases-grid fade-in" id="phasesGrid"></div>
-
-    <div class="timeline-card fade-in">
-      <div class="section-header"><div class="section-title" data-i18n="timeline_title">Flujo de Implementación</div></div>
-      <div class="timeline" id="timeline"></div>
-    </div>
-
-    <div class="table-card fade-in">
-      <div class="table-header section-header">
-        <div class="section-title" data-i18n="modules_title">Módulos por Fase</div>
-        <div style="font-size:11px;color:var(--text-muted)" id="tableUpdated"></div>
+    <!-- PROPERTIES -->
+    <div id="sec-properties" style="display:none" class="fade-in">
+      <div class="table-card">
+        <div class="table-topbar">
+          <div class="section-title" data-i="nav_props">Propiedades</div>
+          <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+            <input class="table-search" id="propSearch" placeholder="🔍 Buscar..." oninput="filterProperties()"/>
+            <div class="filter-tabs">
+              <div class="filter-tab active" onclick="setFilter('all',this)" data-i="f_all">Todas</div>
+              <div class="filter-tab" onclick="setFilter('implementation',this)" data-i="f_impl">Implementación</div>
+              <div class="filter-tab" onclick="setFilter('pilot',this)" data-i="f_pilot">Piloto</div>
+              <div class="filter-tab" onclick="setFilter('support',this)" data-i="f_support">Soporte</div>
+              <div class="filter-tab" onclick="setFilter('done',this)" data-i="f_done">Completado</div>
+            </div>
+            <button class="btn-primary btn-sm" onclick="openAddModal()" data-i="btn_add">+ Agregar</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr>
+              <th data-i="th_prop">Propiedad</th>
+              <th data-i="th_city">Ciudad</th>
+              <th data-i="th_phase">Fase</th>
+              <th data-i="th_units">Unidades</th>
+              <th data-i="th_modules">Módulos</th>
+              <th data-i="th_days">Días en Fase</th>
+              <th data-i="th_progress">Progreso</th>
+              <th data-i="th_actions">Acciones</th>
+            </tr></thead>
+            <tbody id="propsBody"></tbody>
+          </table>
+        </div>
       </div>
-      <div style="overflow-x:auto">
-        <table id="modulesTable">
-          <thead><tr>
-            <th data-i18n="th_module">Módulo</th>
-            <th data-i18n="th_impl">Implementación</th>
-            <th data-i18n="th_pilot">Piloto</th>
-            <th data-i18n="th_support">Soporte</th>
-            <th data-i18n="th_pending">Pendiente</th>
-            <th data-i18n="th_progress">Progreso</th>
-          </tr></thead>
-          <tbody id="modulesBody"></tbody>
-        </table>
+    </div>
+
+    <!-- MODULES -->
+    <div id="sec-modules" style="display:none" class="fade-in">
+      <div class="section-title" data-i="sec_mod_usage">Uso de Módulos por Propiedad</div>
+      <div class="module-meters" id="moduleMeterGrid"></div>
+
+      <div class="charts-grid">
+        <div class="chart-card chart-full">
+          <div class="chart-header"><div class="section-title" data-i="chart_mod_bar">Adopción por Módulo (% vs Meta)</div></div>
+          <div class="chart-body" style="height:280px"><canvas id="chartModFull"></canvas></div>
+        </div>
+        <div class="chart-card chart-full">
+          <div class="chart-header"><div class="section-title" data-i="chart_mod_detail">Detalle por Módulo y Fase</div></div>
+          <div class="chart-body chart-tall"><canvas id="chartModPhase"></canvas></div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-topbar">
+          <div class="section-title" data-i="tbl_mod_title">Módulos vs Meta (Calculado sobre 80% de apartamentos)</div>
+          <div style="font-size:11px;color:var(--text-muted)" id="modTableUpdated"></div>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr>
+              <th data-i="th_module">Módulo</th>
+              <th data-i="th_target">Meta</th>
+              <th data-i="th_impl">Implementación</th>
+              <th data-i="th_pilot">Piloto</th>
+              <th data-i="th_support">Soporte</th>
+              <th data-i="th_done">Completado</th>
+              <th data-i="th_global">Adopción Global</th>
+            </tr></thead>
+            <tbody id="modulesBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div id="sec-charts" style="display:none" class="fade-in">
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header"><div class="section-title" data-i="chart_dist">Distribución por Fase</div></div>
+          <div class="chart-body"><canvas id="chartPhase2"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><div class="section-title" data-i="chart_radar">Radar de Módulos</div></div>
+          <div class="chart-body"><canvas id="chartRadar"></canvas></div>
+        </div>
+        <div class="chart-card chart-full">
+          <div class="chart-header"><div class="section-title" data-i="chart_days">Días en Fase por Propiedad</div></div>
+          <div class="chart-body chart-tall"><canvas id="chartDays"></canvas></div>
+        </div>
+        <div class="chart-card chart-full">
+          <div class="chart-header"><div class="section-title" data-i="chart_indiv">Progreso Individual</div></div>
+          <div class="chart-body chart-tall"><canvas id="chartProps2"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="sec-settings" style="display:none" class="fade-in">
+      <div class="settings-grid">
+        <div class="settings-card">
+          <div class="settings-section" data-i="set_general">General</div>
+          <div class="setting-row">
+            <div><div class="setting-label" data-i="set_theme">Tema de color</div></div>
+            <div class="btn-icon" onclick="toggleTheme()" id="themeBtn2" style="width:auto;padding:0 12px;gap:6px" data-i="set_toggle_theme">🌙 Oscuro</div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label" data-i="set_lang">Idioma</div></div>
+            <select class="setting-input" onchange="setLang(this.value)" id="langSel2">
+              <option value="es">🇨🇴 Español</option>
+              <option value="en">🇺🇸 English</option>
+              <option value="pt">🇧🇷 Português</option>
+              <option value="ja">🇯🇵 日本語</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label" data-i="set_realtime">Actualización automática</div><div class="setting-sub" data-i="set_realtime_sub">Refrescar datos cada N segundos</div></div>
+            <input class="setting-input" type="number" id="setAutoRefresh" min="10" max="3600" value="60" style="width:80px" onchange="saveSettings()"/>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label" data-i="set_name">Tu nombre</div><div class="setting-sub" data-i="set_name_sub">Aparece en el saludo</div></div>
+            <input class="setting-input" type="text" id="setUserName" placeholder="Administrador" oninput="saveSettings();updateGreeting()"/>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-section" data-i="set_targets">Metas de Módulos</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px" data-i="set_targets_sub">Calculado sobre el 80% de apartamentos de cada copropiedad</div>
+          <div id="targetSettings"></div>
+        </div>
+
+        <div class="settings-card full">
+          <div class="settings-section" data-i="set_dates">Configuración de Fechas de Entradas</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:14px" data-i="set_dates_sub">Define los períodos de referencia para el comparativo semanal (viernes como cierre de semana)</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" data-i="set_cur_week">Inicio semana actual</label>
+              <input class="form-input" type="date" id="setCurWeekStart" onchange="saveSettings()"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-i="set_prev_week">Inicio semana anterior</label>
+              <input class="form-input" type="date" id="setPrevWeekStart" onchange="saveSettings()"/>
+            </div>
+          </div>
+          <button class="btn-primary btn-sm" onclick="autoSetDates()" data-i="btn_auto_dates">Calcular automáticamente (último viernes)</button>
+        </div>
+
+        <div class="settings-card full">
+          <div class="settings-section" data-i="set_conn">Conexión Supabase</div>
+          <div class="setting-row">
+            <div><div class="setting-label">Project URL</div></div>
+            <div style="font-size:12px;color:var(--text-muted);font-family:'JetBrains Mono',monospace" id="setShowUrl">No configurado</div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label" data-i="set_status">Estado</div></div>
+            <div id="setConnStatus" style="font-size:12px;font-weight:600"></div>
+          </div>
+          <div style="margin-top:14px;display:flex;gap:10px">
+            <button class="btn-outline btn-sm" onclick="showSection('connect-sub')" data-i="btn_reconn">Reconfigurar conexión</button>
+            <button class="btn-del btn-sm" onclick="disconnectSupabase()" data-i="btn_disconnect">Desconectar</button>
+          </div>
+        </div>
       </div>
     </div>
 
   </div>
 </main>
 
-<div class="toast-container" id="toastContainer"></div>
-
-<script>
-// ── i18n ──────────────────────────────────────────────────────────
-const STRINGS = {
-  es: {
-    page_title:'Panel de Implementación',realtime:'Tiempo Real',
-    connect_supabase:'Conectar con Supabase',connect_desc:'Ingresa tus credenciales para sincronización en tiempo real',
-    btn_connect:'Conectar',btn_demo:'Demo',
-    kpi_total:'Total Propiedades',kpi_total_sub:'En plataforma',
-    kpi_impl:'En Implementación',kpi_pilot:'Piloto',kpi_support:'Soporte Continuo',days_avg:'días promedio',
-    users_label:'Usuarios Registrados',users_sub:'Total en la plataforma · actualizado en tiempo real',
-    users_admin:'Administradores',users_residents:'Residentes',users_staff:'Staff',
-    phases_title:'Progreso por Fase',timeline_title:'Flujo de Implementación',modules_title:'Módulos por Fase',
-    th_module:'Módulo',th_impl:'Implementación',th_pilot:'Piloto',th_support:'Soporte',th_pending:'Pendiente',th_progress:'Progreso',
-    phase_impl:'En Implementación',phase_pilot:'Piloto',phase_support:'Soporte Continuo',phase_done:'Completado',
-    mod_acceso:'Acceso',mod_muro:'Muro',mod_alertas:'Alertas',mod_solicitudes:'Solicitudes',
-    mod_zonas:'Zonas Comunes',mod_documentos:'Documentos',mod_financiero:'Financiero',mod_votaciones:'Votaciones',
-    nav_dashboard:'Dashboard',nav_properties:'Propiedades',nav_modules:'Módulos',nav_users:'Usuarios',nav_reports:'Reportes',nav_settings:'Configuración',
-    connected:'✓ Conectado a Supabase',demo_mode:'⚡ Modo demo activado',refreshed:'↻ Datos actualizados',
-  },
-  en: {
-    page_title:'Implementation Panel',realtime:'Real-Time',
-    connect_supabase:'Connect to Supabase',connect_desc:'Enter your credentials for real-time synchronization',
-    btn_connect:'Connect',btn_demo:'Demo',
-    kpi_total:'Total Properties',kpi_total_sub:'On platform',
-    kpi_impl:'In Implementation',kpi_pilot:'Pilot',kpi_support:'Ongoing Support',days_avg:'avg days',
-    users_label:'Registered Users',users_sub:'Total on platform · updated in real time',
-    users_admin:'Admins',users_residents:'Residents',users_staff:'Staff',
-    phases_title:'Progress by Phase',timeline_title:'Implementation Flow',modules_title:'Modules by Phase',
-    th_module:'Module',th_impl:'Implementation',th_pilot:'Pilot',th_support:'Support',th_pending:'Pending',th_progress:'Progress',
-    phase_impl:'In Implementation',phase_pilot:'Pilot',phase_support:'Ongoing Support',phase_done:'Completed',
-    mod_acceso:'Access',mod_muro:'Wall',mod_alertas:'Alerts',mod_solicitudes:'Requests',
-    mod_zonas:'Common Zones',mod_documentos:'Documents',mod_financiero:'Financial',mod_votaciones:'Voting',
-    nav_dashboard:'Dashboard',nav_properties:'Properties',nav_modules:'Modules',nav_users:'Users',nav_reports:'Reports',nav_settings:'Settings',
-    connected:'✓ Connected to Supabase',demo_mode:'⚡ Demo mode activated',refreshed:'↻ Data refreshed',
-  }
-};
-let lang = localStorage.getItem('dn_lang')||'es';
-const t = k => STRINGS[lang][k]||k;
-
-function applyI18n(){
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const v=STRINGS[lang][el.dataset.i18n];
-    if(v) el.textContent=v;
-  });
-  document.getElementById('langBtn').textContent=lang==='es'?'EN':'ES';
-  renderAll();
-}
-function toggleLang(){lang=lang==='es'?'en':'es';localStorage.setItem('dn_lang',lang);applyI18n();}
-
-// ── THEME ──────────────────────────────────────────────────────────
-let theme=localStorage.getItem('dn_theme')||'light';
-document.body.dataset.theme=theme;
-function toggleTheme(){
-  theme=theme==='light'?'dark':'light';
-  document.body.dataset.theme=theme;
-  localStorage.setItem('dn_theme',theme);
-  document.getElementById('themeBtn').textContent=theme==='dark'?'☀️':'🌙';
-}
-
-// ── DATA ───────────────────────────────────────────────────────────
-let data = {
-  phases:[
-    {id:'impl',key:'phase_impl',color:'#820ad1',bg:'rgba(130,10,209,.1)',count:12,days:45,pct:35,
-     modules:{acceso:1,muro:1,alertas:0,solicitudes:1,zonas:0,documentos:0,financiero:0,votaciones:0}},
-    {id:'pilot',key:'phase_pilot',color:'#e67e00',bg:'rgba(247,181,0,.12)',count:8,days:28,pct:65,
-     modules:{acceso:1,muro:1,alertas:1,solicitudes:1,zonas:1,documentos:0,financiero:0,votaciones:0}},
-    {id:'support',key:'phase_support',color:'#00b460',bg:'rgba(0,180,100,.1)',count:5,days:90,pct:92,
-     modules:{acceso:1,muro:1,alertas:1,solicitudes:1,zonas:1,documentos:1,financiero:1,votaciones:1}},
-    {id:'done',key:'phase_done',color:'#0088cc',bg:'rgba(0,136,204,.1)',count:3,days:180,pct:100,
-     modules:{acceso:1,muro:1,alertas:1,solicitudes:1,zonas:1,documentos:1,financiero:1,votaciones:1}}
-  ],
-  modules:[
-    {id:'acceso',icon:'🔑',impl:18,pilot:8,support:5,pending:2},
-    {id:'muro',icon:'💬',impl:15,pilot:7,support:5,pending:6},
-    {id:'alertas',icon:'🔔',impl:10,pilot:6,support:5,pending:12},
-    {id:'solicitudes',icon:'📋',impl:12,pilot:8,support:5,pending:8},
-    {id:'zonas',icon:'⬜',impl:8,pilot:5,support:5,pending:15},
-    {id:'documentos',icon:'📄',impl:5,pilot:4,support:5,pending:19},
-    {id:'financiero',icon:'💰',impl:4,pilot:3,support:5,pending:21},
-    {id:'votaciones',icon:'🗳️',impl:3,pilot:2,support:5,pending:23}
-  ],
-  users:{total:4287,properties:0,resident:0,apartments:0},
-  lastUpdated:new Date()
-};
-
-// Load cache
-try{const c=localStorage.getItem('dn_data');if(c){const p=JSON.parse(c);data={...data,...p,lastUpdated:new Date(p.lastUpdated||Date.now())}}}catch(e){}
-
-function save(){localStorage.setItem('dn_data',JSON.stringify({...data,lastUpdated:data.lastUpdated.toISOString()}))}
-
-// ── RENDERS ────────────────────────────────────────────────────────
-const MODS=['acceso','muro','alertas','solicitudes','zonas','documentos','financiero','votaciones'];
-
-function renderKPIs(){
-  const ph=data.phases;
-  document.getElementById('kpiTotal').textContent=ph.reduce((s,p)=>s+p.count,0);
-  document.getElementById('kpiImpl').textContent=ph[0].count;
-  document.getElementById('kpiImplDays').textContent=ph[0].days;
-  document.getElementById('kpiPilot').textContent=ph[1].count;
-  document.getElementById('kpiPilotDays').textContent=ph[1].days;
-  document.getElementById('kpiSupport').textContent=ph[2].count;
-  document.getElementById('kpiSupportDays').textContent=ph[2].days;
-  document.getElementById('totalUsers').textContent=data.users.total.toLocaleString();
-  document.getElementById('usersAdmin').textContent=data.users.admin;
-  document.getElementById('usersResident').textContent=data.users.resident.toLocaleString();
-  document.getElementById('usersStaff').textContent=data.users.staff;
-  document.getElementById('lastUpdatedText').textContent=data.lastUpdated.toLocaleTimeString();
-}
-
-function renderPhaseCards(){
-  const g=document.getElementById('phasesGrid');
-  g.innerHTML=data.phases.map(ph=>{
-    const chips=MODS.map(m=>{
-      const v=ph.modules[m]||0;
-      const cls=v?'chip-done':'chip-pending';
-      return `<div class="module-chip ${cls}">${t('mod_'+m)}</div>`;
-    }).join('');
-    return`<div class="phase-card">
-      <div class="phase-header">
-        <div style="display:flex;align-items:center">
-          <div class="phase-dot" style="background:${ph.color}"></div>
-          <div class="phase-name">${t(ph.key)}</div>
+<!-- MODAL -->
+<div class="modal-overlay" id="propModal" style="display:none" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Agregar Propiedad</div>
+      <div class="modal-close" onclick="closeModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editPropId"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i="fld_name">Nombre *</label>
+          <input class="form-input" id="fName" placeholder="Ej: Conjunto Los Pinos"/>
         </div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <div class="phase-days">⏱ ${ph.days} días</div>
-          <div class="phase-count" style="background:${ph.bg};color:${ph.color}">${ph.count} props</div>
+        <div class="form-group">
+          <label class="form-label" data-i="fld_city">Ciudad</label>
+          <input class="form-input" id="fCity" placeholder="Ej: Medellín"/>
         </div>
       </div>
-      <div class="phase-body">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-          <span style="font-size:12px;color:var(--text-muted);font-weight:500">${t('th_progress')}</span>
-          <span class="phase-pct" style="color:${ph.color}">${ph.pct}%</span>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i="fld_phase">Fase *</label>
+          <select class="form-select" id="fPhase">
+            <option value="implementation" data-i="ph_impl">En Implementación</option>
+            <option value="pilot" data-i="ph_pilot">Piloto</option>
+            <option value="support" data-i="ph_support">Soporte Continuo</option>
+            <option value="done" data-i="ph_done">Completado</option>
+          </select>
         </div>
-        <div class="progress-track"><div class="progress-fill" style="width:${ph.pct}%;background:${ph.color}"></div></div>
-        <div class="modules-mini">${chips}</div>
+        <div class="form-group">
+          <label class="form-label" data-i="fld_days">Días en Fase</label>
+          <input class="form-input" id="fDays" type="number" min="0" value="0"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i="fld_units">Total Unidades</label>
+          <input class="form-input" id="fUnits" type="number" min="1" value="50"/>
+          <div class="form-hint" data-i="fld_units_hint">Se usa para calcular metas de módulos</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i="fld_entry_date">Fecha de Entrada</label>
+          <input class="form-input" id="fEntryDate" type="date"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i="fld_modules">Módulos Activos</label>
+        <div class="modules-check-grid" id="modulesChecks"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i="fld_notes">Notas</label>
+        <textarea class="form-textarea" id="fNotes" placeholder="Observaciones..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeModal()" data-i="btn_cancel">Cancelar</button>
+      <button class="btn-primary" onclick="saveProperty()" data-i="btn_save">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastContainer"></div>
+
+<script>
+// ══════ CONSTANTS ══════
+const MODULES = [
+  {id:'acceso',     label:'Acceso',          icon:'🔑', targetType:'pct',  targetVal:10,  targetLabel:'10% de aptmtos/mes'},
+  {id:'muro',       label:'Muro',            icon:'💬', targetType:'fixed', targetVal:8,   targetLabel:'8 publicaciones/mes'},
+  {id:'alertas',    label:'Alertas',         icon:'🔔', targetType:'range', targetVal:[2,5],targetLabel:'2-5 al mes'},
+  {id:'solicitudes',label:'Solicitudes',     icon:'📋', targetType:'pct',  targetVal:30,  targetLabel:'30% de aptmtos'},
+  {id:'zonas',      label:'Zonas Comunes',   icon:'⬜', targetType:'pct',  targetVal:30,  targetLabel:'30% de aptmtos (reservas)'},
+  {id:'documentos', label:'Documentos',      icon:'📄', targetType:'pct',  targetVal:80,  targetLabel:'80% acceso'},
+  {id:'financiero', label:'Financiero',      icon:'💰', targetType:'pct',  targetVal:80,  targetLabel:'80% de aptmtos'},
+  {id:'votaciones', label:'Votaciones',      icon:'🗳️', targetType:'pct',  targetVal:80,  targetLabel:'80% de aptmtos'}
+];
+
+const PHASES = {
+  implementation:{label:'En Implementación',color:'#820ad1',bg:'rgba(130,10,209,.1)',pill:'pill-impl'},
+  pilot:         {label:'Piloto',           color:'#e67e00',bg:'rgba(247,181,0,.12)', pill:'pill-pilot'},
+  support:       {label:'Soporte Continuo', color:'#00b460',bg:'rgba(0,180,100,.1)',  pill:'pill-support'},
+  done:          {label:'Completado',       color:'#0088cc',bg:'rgba(0,136,204,.1)',  pill:'pill-done'}
+};
+
+// ══════ TRANSLATIONS ══════
+const T = {
+  es:{
+    nav_dashboard:'Dashboard',nav_props:'Propiedades',nav_modules:'Módulos',nav_charts:'Gráficas',nav_settings:'Configuración',
+    topbar_title:'Panel de',topbar_impl:'Implementación',
+    no_conn:'Sin conexión',realtime:'Tiempo Real',
+    good_morning:'Buenos días',good_afternoon:'Buenas tardes',good_evening:'Buenas noches',
+    conn_title:'Conectar con Supabase',conn_sub:'Ingresa las credenciales de tu proyecto Supabase.',
+    btn_connect:'Conectar →',btn_demo:'Modo Demo',btn_add:'+ Agregar',btn_cancel:'Cancelar',btn_save:'💾 Guardar',
+    btn_reconn:'Reconfigurar',btn_disconnect:'Desconectar',btn_auto_dates:'Calcular automáticamente',
+    kpi_total:'Total Propiedades',kpi_total_sub:'En plataforma',kpi_impl:'En Implementación',kpi_pilot:'Piloto',kpi_support:'Soporte Continuo',
+    wc_title:'Esta semana vs semana pasada',
+    sec_phases:'Progreso por Fase',sec_mod_usage:'Uso de Módulos por Propiedad',
+    chart_phase:'Propiedades por Fase',chart_modules:'Adopción de Módulos',chart_props:'Progreso por Propiedad',
+    chart_mod_bar:'Adopción por Módulo (% vs Meta)',chart_mod_detail:'Detalle por Módulo y Fase',
+    tbl_mod_title:'Módulos vs Meta (sobre 80% de aptos)',
+    chart_dist:'Distribución por Fase',chart_radar:'Radar de Módulos',chart_days:'Días en Fase por Propiedad',chart_indiv:'Progreso Individual',
+    th_prop:'Propiedad',th_city:'Ciudad',th_phase:'Fase',th_units:'Unidades',th_modules:'Módulos',th_days:'Días en Fase',th_progress:'Progreso',th_actions:'Acciones',
+    th_module:'Módulo',th_target:'Meta',th_impl:'Impl.',th_pilot:'Piloto',th_support:'Soporte',th_done:'Completado',th_global:'Adopción Global',
+    set_general:'General',set_theme:'Tema de color',set_toggle_theme:'Cambiar tema',set_lang:'Idioma',
+    set_realtime:'Actualización automática',set_realtime_sub:'Refrescar datos cada N segundos',
+    set_name:'Tu nombre',set_name_sub:'Aparece en el saludo',
+    set_targets:'Metas de Módulos',set_targets_sub:'Calculado sobre el 80% de apartamentos',
+    set_dates:'Configuración de Fechas',set_dates_sub:'Períodos de referencia (viernes como cierre)',
+    set_cur_week:'Inicio semana actual',set_prev_week:'Inicio semana anterior',
+    set_conn:'Conexión Supabase',set_status:'Estado',
+    fld_name:'Nombre *',fld_city:'Ciudad',fld_phase:'Fase *',fld_days:'Días en Fase',
+    fld_units:'Total Unidades',fld_units_hint:'Se usa para calcular metas',fld_entry_date:'Fecha de Entrada',
+    fld_modules:'Módulos Activos',fld_notes:'Notas',
+    f_all:'Todas',f_impl:'Implementación',f_pilot:'Piloto',f_support:'Soporte',f_done:'Completado',
+    toast_connected:'✅ Conectado a Supabase',toast_error_conn:'Error de conexión',toast_saved:'✅ Guardado',toast_deleted:'🗑️ Eliminado',toast_refreshed:'↻ Actualizado',
+    empty_props:'Sin propiedades. ¡Agrega la primera!',ph_impl:'En Implementación',ph_pilot:'Piloto',ph_support:'Soporte Continuo',ph_done:'Completado',
+    vs_week:'vs sem. anterior',this_week:'Esta semana',last_week:'Sem. pasada',connected:'Conectado ✓',not_connected:'No conectado',
+    demo_mode:'🧪 Modo demo activo'
+  },
+  en:{
+    nav_dashboard:'Dashboard',nav_props:'Properties',nav_modules:'Modules',nav_charts:'Charts',nav_settings:'Settings',
+    topbar_title:'Implementation',topbar_impl:'Panel',
+    no_conn:'Offline',realtime:'Live',
+    good_morning:'Good morning',good_afternoon:'Good afternoon',good_evening:'Good evening',
+    conn_title:'Connect to Supabase',conn_sub:'Enter your Supabase project credentials.',
+    btn_connect:'Connect →',btn_demo:'Demo Mode',btn_add:'+ Add',btn_cancel:'Cancel',btn_save:'💾 Save',
+    btn_reconn:'Reconfigure',btn_disconnect:'Disconnect',btn_auto_dates:'Auto calculate',
+    kpi_total:'Total Properties',kpi_total_sub:'On platform',kpi_impl:'In Implementation',kpi_pilot:'Pilot',kpi_support:'Ongoing Support',
+    wc_title:'This week vs last week',
+    sec_phases:'Progress by Phase',sec_mod_usage:'Module Usage per Property',
+    chart_phase:'Properties by Phase',chart_modules:'Module Adoption',chart_props:'Progress per Property',
+    chart_mod_bar:'Module Adoption (% vs Target)',chart_mod_detail:'Module Detail by Phase',
+    tbl_mod_title:'Modules vs Target (80% of units)',
+    chart_dist:'Distribution by Phase',chart_radar:'Module Radar',chart_days:'Days in Phase per Property',chart_indiv:'Individual Progress',
+    th_prop:'Property',th_city:'City',th_phase:'Phase',th_units:'Units',th_modules:'Modules',th_days:'Days in Phase',th_progress:'Progress',th_actions:'Actions',
+    th_module:'Module',th_target:'Target',th_impl:'Impl.',th_pilot:'Pilot',th_support:'Support',th_done:'Done',th_global:'Global Adoption',
+    set_general:'General',set_theme:'Color theme',set_toggle_theme:'Toggle theme',set_lang:'Language',
+    set_realtime:'Auto refresh',set_realtime_sub:'Refresh data every N seconds',
+    set_name:'Your name',set_name_sub:'Shown in greeting',
+    set_targets:'Module Targets',set_targets_sub:'Calculated on 80% of apartments',
+    set_dates:'Date Configuration',set_dates_sub:'Reference periods (Friday as week end)',
+    set_cur_week:'Current week start',set_prev_week:'Previous week start',
+    set_conn:'Supabase Connection',set_status:'Status',
+    fld_name:'Name *',fld_city:'City',fld_phase:'Phase *',fld_days:'Days in Phase',
+    fld_units:'Total Units',fld_units_hint:'Used to calculate targets',fld_entry_date:'Entry Date',
+    fld_modules:'Active Modules',fld_notes:'Notes',
+    f_all:'All',f_impl:'Implementation',f_pilot:'Pilot',f_support:'Support',f_done:'Done',
+    toast_connected:'✅ Connected to Supabase',toast_error_conn:'Connection error',toast_saved:'✅ Saved',toast_deleted:'🗑️ Deleted',toast_refreshed:'↻ Refreshed',
+    empty_props:'No properties. Add the first one!',ph_impl:'In Implementation',ph_pilot:'Pilot',ph_support:'Ongoing Support',ph_done:'Done',
+    vs_week:'vs last week',this_week:'This week',last_week:'Last week',connected:'Connected ✓',not_connected:'Not connected',
+    demo_mode:'🧪 Demo mode active'
+  },
+  pt:{
+    nav_dashboard:'Painel',nav_props:'Propriedades',nav_modules:'Módulos',nav_charts:'Gráficos',nav_settings:'Configurações',
+    topbar_title:'Painel de',topbar_impl:'Implementação',
+    no_conn:'Sem conexão',realtime:'Tempo Real',
+    good_morning:'Bom dia',good_afternoon:'Boa tarde',good_evening:'Boa noite',
+    conn_title:'Conectar ao Supabase',conn_sub:'Insira as credenciais do seu projeto Supabase.',
+    btn_connect:'Conectar →',btn_demo:'Modo Demo',btn_add:'+ Adicionar',btn_cancel:'Cancelar',btn_save:'💾 Salvar',
+    btn_reconn:'Reconfigurar',btn_disconnect:'Desconectar',btn_auto_dates:'Calcular automaticamente',
+    kpi_total:'Total de Propriedades',kpi_total_sub:'Na plataforma',kpi_impl:'Em Implementação',kpi_pilot:'Piloto',kpi_support:'Suporte Contínuo',
+    wc_title:'Esta semana vs semana passada',
+    sec_phases:'Progresso por Fase',sec_mod_usage:'Uso de Módulos por Propriedade',
+    chart_phase:'Propriedades por Fase',chart_modules:'Adoção de Módulos',chart_props:'Progresso por Propriedade',
+    chart_mod_bar:'Adoção por Módulo (% vs Meta)',chart_mod_detail:'Detalhe por Módulo e Fase',
+    tbl_mod_title:'Módulos vs Meta (80% dos aptos)',
+    chart_dist:'Distribuição por Fase',chart_radar:'Radar de Módulos',chart_days:'Dias na Fase por Propriedade',chart_indiv:'Progresso Individual',
+    th_prop:'Propriedade',th_city:'Cidade',th_phase:'Fase',th_units:'Unidades',th_modules:'Módulos',th_days:'Dias na Fase',th_progress:'Progresso',th_actions:'Ações',
+    th_module:'Módulo',th_target:'Meta',th_impl:'Impl.',th_pilot:'Piloto',th_support:'Suporte',th_done:'Concluído',th_global:'Adoção Global',
+    set_general:'Geral',set_theme:'Tema de cor',set_toggle_theme:'Alternar tema',set_lang:'Idioma',
+    set_realtime:'Atualização automática',set_realtime_sub:'Atualizar dados a cada N segundos',
+    set_name:'Seu nome',set_name_sub:'Aparece na saudação',
+    set_targets:'Metas de Módulos',set_targets_sub:'Calculado em 80% dos apartamentos',
+    set_dates:'Configuração de Datas',set_dates_sub:'Períodos de referência (sexta como fim de semana)',
+    set_cur_week:'Início da semana atual',set_prev_week:'Início da semana anterior',
+    set_conn:'Conexão Supabase',set_status:'Status',
+    fld_name:'Nome *',fld_city:'Cidade',fld_phase:'Fase *',fld_days:'Dias na Fase',
+    fld_units:'Total de Unidades',fld_units_hint:'Usado para calcular metas',fld_entry_date:'Data de Entrada',
+    fld_modules:'Módulos Ativos',fld_notes:'Notas',
+    f_all:'Todas',f_impl:'Implementação',f_pilot:'Piloto',f_support:'Suporte',f_done:'Concluído',
+    toast_connected:'✅ Conectado ao Supabase',toast_error_conn:'Erro de conexão',toast_saved:'✅ Salvo',toast_deleted:'🗑️ Excluído',toast_refreshed:'↻ Atualizado',
+    empty_props:'Sem propriedades. Adicione a primeira!',ph_impl:'Em Implementação',ph_pilot:'Piloto',ph_support:'Suporte Contínuo',ph_done:'Concluído',
+    vs_week:'vs sem. passada',this_week:'Esta semana',last_week:'Sem. passada',connected:'Conectado ✓',not_connected:'Não conectado',
+    demo_mode:'🧪 Modo demo ativo'
+  },
+  ja:{
+    nav_dashboard:'ダッシュボード',nav_props:'物件',nav_modules:'モジュール',nav_charts:'グラフ',nav_settings:'設定',
+    topbar_title:'実装',topbar_impl:'パネル',
+    no_conn:'オフライン',realtime:'リアルタイム',
+    good_morning:'おはようございます',good_afternoon:'こんにちは',good_evening:'こんばんは',
+    conn_title:'Supabaseに接続',conn_sub:'Supabaseプロジェクトの認証情報を入力してください。',
+    btn_connect:'接続 →',btn_demo:'デモモード',btn_add:'+ 追加',btn_cancel:'キャンセル',btn_save:'💾 保存',
+    btn_reconn:'再設定',btn_disconnect:'切断',btn_auto_dates:'自動計算',
+    kpi_total:'総物件数',kpi_total_sub:'プラットフォーム上',kpi_impl:'実装中',kpi_pilot:'パイロット',kpi_support:'継続サポート',
+    wc_title:'今週 vs 先週',
+    sec_phases:'フェーズ別進捗',sec_mod_usage:'物件別モジュール使用状況',
+    chart_phase:'フェーズ別物件',chart_modules:'モジュール採用',chart_props:'物件別進捗',
+    chart_mod_bar:'モジュール採用率（% vs 目標）',chart_mod_detail:'フェーズ別モジュール詳細',
+    tbl_mod_title:'モジュール vs 目標（80%基準）',
+    chart_dist:'フェーズ別分布',chart_radar:'モジュールレーダー',chart_days:'フェーズ日数',chart_indiv:'個別進捗',
+    th_prop:'物件',th_city:'都市',th_phase:'フェーズ',th_units:'ユニット数',th_modules:'モジュール',th_days:'フェーズ日数',th_progress:'進捗',th_actions:'操作',
+    th_module:'モジュール',th_target:'目標',th_impl:'実装',th_pilot:'パイロット',th_support:'サポート',th_done:'完了',th_global:'全体採用率',
+    set_general:'一般',set_theme:'カラーテーマ',set_toggle_theme:'テーマ切替',set_lang:'言語',
+    set_realtime:'自動更新',set_realtime_sub:'N秒ごとにデータを更新',
+    set_name:'あなたの名前',set_name_sub:'挨拶に表示',
+    set_targets:'モジュール目標',set_targets_sub:'各物件の80%のアパートで計算',
+    set_dates:'日付設定',set_dates_sub:'参照期間（金曜日を週末として）',
+    set_cur_week:'今週の開始日',set_prev_week:'先週の開始日',
+    set_conn:'Supabase接続',set_status:'ステータス',
+    fld_name:'名前 *',fld_city:'都市',fld_phase:'フェーズ *',fld_days:'フェーズ日数',
+    fld_units:'総ユニット数',fld_units_hint:'目標計算に使用',fld_entry_date:'登録日',
+    fld_modules:'アクティブモジュール',fld_notes:'メモ',
+    f_all:'すべて',f_impl:'実装中',f_pilot:'パイロット',f_support:'サポート',f_done:'完了',
+    toast_connected:'✅ Supabaseに接続しました',toast_error_conn:'接続エラー',toast_saved:'✅ 保存しました',toast_deleted:'🗑️ 削除しました',toast_refreshed:'↻ 更新しました',
+    empty_props:'物件がありません。最初の物件を追加してください！',ph_impl:'実装中',ph_pilot:'パイロット',ph_support:'継続サポート',ph_done:'完了',
+    vs_week:'vs 先週',this_week:'今週',last_week:'先週',connected:'接続済み ✓',not_connected:'未接続',
+    demo_mode:'🧪 デモモード有効'
+  }
+};
+
+// ══════ STATE ══════
+let sb = null, sbChannel = null, charts = {}, activeFilter = 'all', searchQuery = '';
+let lang = localStorage.getItem('dn_lang') || 'es';
+let theme = localStorage.getItem('dn_theme') || 'light';
+let isConnected = false;
+let autoRefreshTimer = null;
+let clockTimer = null;
+let settings = {
+  autoRefresh: 60,
+  userName: '',
+  curWeekStart: '',
+  prevWeekStart: '',
+  moduleTargets: {}
+};
+
+let state = {
+  properties: [],
+  weekData: {current:{}, previous:{}},
+  lastUpdated: null
+};
+
+function t(key) { return (T[lang] && T[lang][key]) || (T['es'][key]) || key; }
+
+// ══════ DEMO DATA ══════
+function useDemoData() {
+  isConnected = true;
+  setRealtimeBadge(false);
+  state.properties = [
+    {id:'1',name:'Torres del Parque',city:'Bogotá',phase:'implementation',days:45,units:120,modules:['acceso','muro','alertas'],notes:'Iniciando fase de capacitación',entry_date:'2024-11-01'},
+    {id:'2',name:'Conjunto Los Andes',city:'Medellín',phase:'pilot',days:30,units:85,modules:['acceso','muro','solicitudes','zonas'],notes:'Piloto exitoso hasta ahora',entry_date:'2024-10-15'},
+    {id:'3',name:'Residencias Bolívar',city:'Cali',phase:'support',days:180,units:200,modules:['acceso','muro','alertas','solicitudes','zonas','documentos','financiero'],notes:'Consolidado',entry_date:'2024-05-01'},
+    {id:'4',name:'Park Reservado',city:'Barranquilla',phase:'done',days:365,units:60,modules:['acceso','muro','alertas','solicitudes','zonas','documentos','financiero','votaciones'],notes:'Implementación completa',entry_date:'2024-01-01'},
+    {id:'5',name:'Ciudad Verde',city:'Pereira',phase:'implementation',days:15,units:75,modules:['acceso'],notes:'Inicio reciente',entry_date:'2024-12-15'},
+    {id:'6',name:'Altos del Prado',city:'Bucaramanga',phase:'pilot',days:22,units:95,modules:['acceso','muro','alertas','solicitudes'],notes:'Buen avance',entry_date:'2024-12-01'}
+  ];
+  state.weekData = {
+    current:  {alertas:4,  solicitudes:28, muro:9,  acceso:12},
+    previous: {alertas:3,  solicitudes:24, muro:7,  acceso:10}
+  };
+  document.getElementById('sec-connect').style.display = 'none';
+  document.getElementById('sec-dashboard').style.display = 'block';
+  showToast(t('demo_mode'), 'success');
+  renderSection('dashboard');
+}
+
+// ══════ NAVIGATION ══════
+function showSection(id, el) {
+  if (!isConnected && id !== 'connect') {
+    if (id === 'connect-sub') {
+      document.querySelectorAll('[id^="sec-"]').forEach(s => s.style.display='none');
+      document.getElementById('sec-connect').style.display='block';
+      return;
+    }
+    showToast(lang==='es'?'Conecta primero':'Connect first','error');
+    return;
+  }
+  document.querySelectorAll('[id^="sec-"]').forEach(s => s.style.display='none');
+  document.getElementById('sec-' + id).style.display = 'block';
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderSection(id);
+}
+
+function renderSection(id) {
+  if (id==='dashboard')   { renderKPIs(); renderWeekCompare(); renderPhases(); renderDashCharts(); }
+  if (id==='properties')  renderPropertiesTable();
+  if (id==='modules')     renderModulesSection();
+  if (id==='charts')      renderChartsPage();
+  if (id==='settings')    renderSettings();
+}
+
+// ══════ SUPABASE ══════
+async function loadScript(src) {
+  return new Promise((res,rej) => {
+    const s = document.createElement('script');
+    s.src=src; s.onload=res; s.onerror=rej;
+    document.head.appendChild(s);
+  });
+}
+
+async function connectSupabase() {
+  const url = document.getElementById('sbUrl').value.trim();
+  const key = document.getElementById('sbKey').value.trim();
+  if (!url||!key){ showToast(lang==='es'?'Ingresa URL y Key':'Enter URL and Key','error'); return; }
+  const btn = document.getElementById('btnConnect');
+  btn.disabled=true; btn.textContent='⏳...';
+  try {
+    if (!window.supabase) await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js');
+    sb = window.supabase.createClient(url, key);
+    const {error} = await sb.from('properties').select('id',{count:'exact',head:true});
+    if (error) throw error;
+    localStorage.setItem('dn_sb_url', url);
+    localStorage.setItem('dn_sb_key', key);
+    isConnected=true; setRealtimeBadge(true);
+    document.getElementById('sec-connect').style.display='none';
+    document.getElementById('sec-dashboard').style.display='block';
+    showToast(t('toast_connected'),'success');
+    await fetchAllData();
+    startRealtime();
+    startAutoRefresh();
+  } catch(e) {
+    showToast(t('toast_error_conn')+': '+e.message,'error');
+    btn.disabled=false; btn.textContent=t('btn_connect');
+  }
+}
+
+async function fetchAllData() {
+  if (!sb) return;
+  try {
+    const {data:props,error} = await sb.from('properties').select('*').order('created_at',{ascending:false});
+    if (error) throw error;
+    state.properties = (props||[]).map(p => ({
+      id:p.id, name:p.name||'', city:p.city||'', phase:p.phase||'implementation',
+      days:p.days_elapsed||0, units:p.units||0, modules:Array.isArray(p.active_modules)?p.active_modules:[],
+      notes:p.notes||'', entry_date:p.entry_date||''
+    }));
+    // Fetch week activity if table exists
+    try {
+      const {data:wdata} = await sb.from('activity_log').select('*').order('week_start',{ascending:false}).limit(100);
+      if (wdata && wdata.length) {
+        const cfg = settings;
+        const cur = wdata.filter(r => r.week_start >= (cfg.curWeekStart||getLastFriday(-7)));
+        const prev = wdata.filter(r => r.week_start >= (cfg.prevWeekStart||getLastFriday(-14)) && r.week_start < (cfg.curWeekStart||getLastFriday(-7)));
+        const sum = (arr, mod) => arr.filter(r=>r.module===mod).reduce((s,r)=>s+(r.count||0),0);
+        MODULES.forEach(m => {
+          state.weekData.current[m.id] = sum(cur,m.id);
+          state.weekData.previous[m.id] = sum(prev,m.id);
+        });
+      }
+    } catch(e2) {}
+    state.lastUpdated = new Date();
+    const active = document.querySelector('[id^="sec-"]:not([style*="none"])');
+    if (active) renderSection(active.id.replace('sec-',''));
+  } catch(e) { showToast(lang==='es'?'Error al cargar datos':'Error loading data','error'); }
+}
+
+async function insertSupabase(prop) {
+  if (!sb) return;
+  const {error} = await sb.from('properties').insert({
+    name:prop.name, city:prop.city, phase:prop.phase, days_elapsed:prop.days,
+    units:prop.units, active_modules:prop.modules, notes:prop.notes, entry_date:prop.entry_date
+  });
+  if (error) showToast('Error: '+error.message,'error');
+}
+
+async function updateSupabase(id, prop) {
+  if (!sb) return;
+  const {error} = await sb.from('properties').update({
+    name:prop.name, city:prop.city, phase:prop.phase, days_elapsed:prop.days,
+    units:prop.units, active_modules:prop.modules, notes:prop.notes, entry_date:prop.entry_date
+  }).eq('id',id);
+  if (error) showToast('Error: '+error.message,'error');
+}
+
+async function deleteSupabase(id) {
+  if (!sb) return;
+  const {error} = await sb.from('properties').delete().eq('id',id);
+  if (error) showToast('Error: '+error.message,'error');
+}
+
+function startRealtime() {
+  if (!sb) return;
+  sbChannel = sb.channel('dn-rt')
+    .on('postgres_changes',{event:'*',schema:'public',table:'properties'},() => fetchAllData())
+    .subscribe(status => setRealtimeBadge(status==='SUBSCRIBED'));
+}
+
+function startAutoRefresh() {
+  if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+  const sec = parseInt(settings.autoRefresh)||60;
+  if (sb && sec > 0) autoRefreshTimer = setInterval(() => fetchAllData(), sec*1000);
+}
+
+function setRealtimeBadge(on) {
+  const b=document.getElementById('realtimeBadge'), tx=document.getElementById('realtimeText');
+  if (on){ b.classList.remove('off'); tx.textContent=t('realtime'); }
+  else { b.classList.add('off'); tx.textContent=t('no_conn'); }
+}
+
+function disconnectSupabase() {
+  if (sbChannel) sb.removeChannel(sbChannel);
+  sb=null; isConnected=false;
+  localStorage.removeItem('dn_sb_url'); localStorage.removeItem('dn_sb_key');
+  setRealtimeBadge(false);
+  state.properties=[];
+  document.querySelectorAll('[id^="sec-"]').forEach(s=>s.style.display='none');
+  document.getElementById('sec-connect').style.display='block';
+  showToast(lang==='es'?'Desconectado':'Disconnected','success');
+}
+
+// ══════ KPIs ══════
+function renderKPIs() {
+  const p=state.properties;
+  const byPhase=ph=>p.filter(x=>x.phase===ph);
+  const avg=ph=>{const a=byPhase(ph);return a.length?Math.round(a.reduce((s,x)=>s+(x.days||0),0)/a.length):0;};
+  el('kpiTotal').textContent=p.length;
+  el('kpiImpl').textContent=byPhase('implementation').length;
+  el('kpiImplDays').textContent=avg('implementation');
+  el('kpiPilot').textContent=byPhase('pilot').length;
+  el('kpiPilotDays').textContent=avg('pilot');
+  el('kpiSupport').textContent=byPhase('support').length;
+  el('kpiSupportDays').textContent=avg('support');
+}
+
+// ══════ WEEK COMPARE ══════
+function getLastFriday(offset=0) {
+  const d=new Date(); const day=d.getDay(); const diff=day>=5?day-5:day+2;
+  d.setDate(d.getDate()-diff+offset); return d.toISOString().split('T')[0];
+}
+
+function renderWeekCompare() {
+  const container=el('wcGrid');
+  const modules=['alertas','solicitudes','muro','acceso','zonas','solicitudes'];
+  const sel=['alertas','solicitudes','muro','acceso'];
+  // date range label
+  const cws = settings.curWeekStart || getLastFriday(-7);
+  const pws = settings.prevWeekStart || getLastFriday(-14);
+  el('wcDateRange').textContent = (t('this_week')+': '+cws+' | '+t('last_week')+': '+pws);
+
+  container.innerHTML = sel.map(mid => {
+    const m=MODULES.find(x=>x.id===mid);
+    const cur = state.weekData.current[mid]||0;
+    const prev = state.weekData.previous[mid]||0;
+    const diff = cur - prev;
+    const pct = prev>0 ? Math.round((diff/prev)*100) : 0;
+    const cls = diff>0?'up':diff<0?'down':'eq';
+    const arrow = diff>0?'▲':diff<0?'▼':'—';
+    return `<div class="wc-item">
+      <div class="wc-mod">${m.icon} ${m.label}</div>
+      <div class="wc-vals">
+        <div class="wc-cur">${cur}</div>
+        <div class="wc-prev">${t('last_week')}: ${prev}</div>
+        <div class="wc-delta ${cls}">${arrow} ${Math.abs(pct)}%</div>
+      </div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:4px">${m.targetLabel}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════ PHASES ══════
+function renderPhases() {
+  const total=state.properties.length||1;
+  el('phasesGrid').innerHTML=Object.entries(PHASES).map(([k,cfg])=>{
+    const cnt=state.properties.filter(p=>p.phase===k).length;
+    const pct=Math.round((cnt/total)*100);
+    const avg=cnt?Math.round(state.properties.filter(p=>p.phase===k).reduce((s,p)=>s+(p.days||0),0)/cnt):0;
+    return `<div class="phase-card">
+      <div class="phase-header">
+        <div style="display:flex;align-items:center">
+          <div class="phase-dot" style="background:${cfg.color}"></div>
+          <div class="phase-name">${cfg.label}</div>
+        </div>
+        <div class="phase-count" style="background:${cfg.bg};color:${cfg.color}">${cnt}</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-pct" style="color:${cfg.color}">${pct}%</div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${cfg.color}"></div></div>
+        <div class="phase-days">⏱ ${avg} ${lang==='ja'?'日':'días'} ${lang==='en'?'avg.':'prom.'}</div>
       </div>
     </div>`;
   }).join('');
 }
 
-function renderModules(){
-  const tbody=document.getElementById('modulesBody');
-  tbody.innerHTML=data.modules.map(m=>{
-    const total=m.impl+m.pilot+m.support+m.pending;
-    const done=m.impl+m.pilot+m.support;
-    const pct=total>0?Math.round((done/total)*100):0;
+// ══════ PROPERTIES TABLE ══════
+function getFilteredProps() {
+  let list=[...state.properties];
+  if (activeFilter!=='all') list=list.filter(p=>p.phase===activeFilter);
+  if (searchQuery){ const q=searchQuery.toLowerCase(); list=list.filter(p=>p.name.toLowerCase().includes(q)||(p.city||'').toLowerCase().includes(q)); }
+  return list;
+}
+
+function renderPropertiesTable() {
+  const tbody=el('propsBody'), list=getFilteredProps();
+  if (!list.length){ tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state">📭 ${t('empty_props')}</div></td></tr>`; return; }
+  tbody.innerHTML=list.map(p=>{
+    const cfg=PHASES[p.phase]||PHASES.implementation;
+    const modCnt=(p.modules||[]).length;
+    const pct=Math.round((modCnt/MODULES.length)*100);
     const clr=pct>=80?'#00b460':pct>=50?'#e67e00':'#820ad1';
-    return`<tr>
-      <td><div class="mod-cell"><div class="mod-badge">${m.icon}</div>${t('mod_'+m.id)}</div></td>
-      <td><span class="pill pill-p">${m.impl}</span></td>
-      <td><span class="pill pill-pi">${m.pilot}</span></td>
-      <td><span class="pill pill-s">${m.support}</span></td>
-      <td><span class="pill pill-pe">${m.pending}</span></td>
-      <td><div class="bar-cell">
-        <div class="mini-bar"><div class="mini-fill" style="width:${pct}%;background:${clr}"></div></div>
-        <div class="pct-label" style="color:${clr}">${pct}%</div>
-      </div></td>
+    return `<tr>
+      <td><strong>${p.name}</strong>${p.entry_date?`<div style="font-size:10px;color:var(--text-muted)">📅 ${p.entry_date}</div>`:''}</td>
+      <td>${p.city||'—'}</td>
+      <td><span class="pill ${cfg.pill}">${cfg.label}</span></td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${p.units||0}</td>
+      <td>
+        <div class="bar-cell">
+          <div class="mini-bar"><div class="mini-fill" style="width:${pct}%;background:${clr}"></div></div>
+          <span class="pct-label" style="color:${clr}">${modCnt}/${MODULES.length}</span>
+        </div>
+      </td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:12px">${p.days||0}</td>
+      <td>
+        <div class="bar-cell">
+          <div class="mini-bar"><div class="mini-fill" style="width:${pct}%;background:${clr}"></div></div>
+          <span class="pct-label" style="color:${clr}">${pct}%</span>
+        </div>
+      </td>
+      <td>
+        <div class="actions-cell">
+          <button class="btn-edit" onclick="openEditModal('${p.id}')">✏️</button>
+          <button class="btn-del" onclick="deleteProp('${p.id}')">🗑️</button>
+        </div>
+      </td>
     </tr>`;
   }).join('');
-  document.getElementById('tableUpdated').textContent=new Date().toLocaleTimeString();
 }
 
-function renderTimeline(){
-  const steps=[
-    {key:'phase_impl',icon:'⚙️',state:'tl-active'},
-    {key:'phase_pilot',icon:'🧪',state:'tl-active'},
-    {key:'phase_support',icon:'🛡️',state:'tl-active'},
-    {key:'phase_done',icon:'✅',state:'tl-upcoming'},
-  ];
-  document.getElementById('timeline').innerHTML=steps.map((s,i)=>`
-    <div class="tl-item">
-      <div class="tl-dot ${s.state}">${s.icon}</div>
-      <div class="tl-label">${t(s.key)}</div>
-      <div class="tl-sub">${data.phases[i].count} props</div>
-    </div>
-  `).join('');
+function filterProperties(){ searchQuery=el('propSearch').value; renderPropertiesTable(); }
+function setFilter(f,e){ activeFilter=f; document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active')); e.classList.add('active'); renderPropertiesTable(); }
+
+// ══════ MODULES SECTION ══════
+function renderModulesSection() {
+  renderModuleMeters();
+  renderModulesTable();
+  renderModuleCharts();
+  el('modTableUpdated').textContent = new Date().toLocaleTimeString();
 }
 
-function renderAll(){renderKPIs();renderPhaseCards();renderModules();renderTimeline();}
+function getModuleTarget(m, units) {
+  const base = Math.round(units * 0.8);
+  if (m.targetType==='pct') return Math.round(base * m.targetVal/100);
+  if (m.targetType==='fixed') return m.targetVal;
+  if (m.targetType==='range') return m.targetVal[1]; // upper bound
+  return 0;
+}
 
-// ── SUPABASE ───────────────────────────────────────────────────────
-let sb=null,sbChannel=null;
+function renderModuleMeters() {
+  const grid=el('moduleMeterGrid');
+  grid.innerHTML=MODULES.map(m=>{
+    const props=state.properties.filter(p=>(p.modules||[]).includes(m.id));
+    const total=state.properties.length||1;
+    const pct=Math.round((props.length/total)*100);
+    const totalUnits=state.properties.reduce((s,p)=>s+(p.units||0),0)||1;
+    const avgTarget=Math.round(state.properties.reduce((s,p)=>s+getModuleTarget(m,p.units||50),0)/total);
+    const clr=pct>=80?'#00b460':pct>=50?'#e67e00':'#820ad1';
+    return `<div class="mod-meter">
+      <div class="mm-header">
+        <div class="mm-name"><span class="mm-icon">${m.icon}</span>${m.label}</div>
+        <div class="mm-pct" style="color:${clr}">${pct}%</div>
+      </div>
+      <div class="mm-bar-wrap">
+        <div class="mm-bar"><div class="mm-fill" style="width:${pct}%;background:${clr}"></div></div>
+      </div>
+      <div class="mm-meta">
+        <span>${props.length} / ${total} ${lang==='en'?'properties':lang==='pt'?'propriedades':lang==='ja'?'物件':'propiedades'}</span>
+        <span style="color:${clr}">${m.targetLabel}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-async function connectSupabase(){
-  const url=document.getElementById('sbUrl').value.trim();
-  const key=document.getElementById('sbKey').value.trim();
-  if(!url||!key){showToast('Ingresa URL y API Key','error');return;}
-  try{
-    if(!window.supabase){
-      await new Promise((res,rej)=>{
-        const s=document.createElement('script');
-        s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-        s.onload=res;s.onerror=rej;document.head.appendChild(s);
-      });
+function renderModulesTable() {
+  const tbody=el('modulesBody');
+  tbody.innerHTML=MODULES.map(m=>{
+    const withMod=ph=>state.properties.filter(p=>p.phase===ph&&(p.modules||[]).includes(m.id)).length;
+    const impl=withMod('implementation'), pilot=withMod('pilot'), support=withMod('support'), done=withMod('done');
+    const total=state.properties.length||1;
+    const active=state.properties.filter(p=>(p.modules||[]).includes(m.id)).length;
+    const pct=Math.round((active/total)*100);
+    const clr=pct>=80?'#00b460':pct>=50?'#e67e00':'#820ad1';
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">${m.icon}</span><strong>${m.label}</strong></div></td>
+      <td><div style="font-size:10px;color:var(--text-muted)">${m.targetLabel}</div></td>
+      <td><span class="pill pill-impl">${impl}</span></td>
+      <td><span class="pill pill-pilot">${pilot}</span></td>
+      <td><span class="pill pill-support">${support}</span></td>
+      <td><span class="pill pill-done">${done}</span></td>
+      <td>
+        <div class="bar-cell">
+          <div class="mini-bar"><div class="mini-fill" style="width:${pct}%;background:${clr}"></div></div>
+          <span class="pct-label" style="color:${clr}">${pct}%</span>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderModuleCharts() {
+  const props=state.properties;
+  // Bar chart adoption vs target
+  const adoptPct=MODULES.map(m=>{
+    const active=props.filter(p=>(p.modules||[]).includes(m.id)).length;
+    return props.length?Math.round((active/props.length)*100):0;
+  });
+  const targetPcts=MODULES.map(m=>m.targetType==='range'?100:m.targetVal);
+  makeChart('chartModFull','bar',MODULES.map(m=>m.label),[
+    {label:t('th_global'),data:adoptPct,backgroundColor:'#820ad1',borderRadius:6,borderSkipped:false},
+    {label:t('th_target'),data:targetPcts,backgroundColor:'rgba(247,181,0,.5)',borderRadius:6,borderSkipped:false,type:'bar'}
+  ]);
+
+  // Stacked bar by phase
+  makeChart('chartModPhase','bar',MODULES.map(m=>m.label),[
+    {label:t('th_impl'),data:MODULES.map(m=>props.filter(p=>p.phase==='implementation'&&(p.modules||[]).includes(m.id)).length),backgroundColor:'#820ad1',borderRadius:0,borderSkipped:false},
+    {label:t('th_pilot'),data:MODULES.map(m=>props.filter(p=>p.phase==='pilot'&&(p.modules||[]).includes(m.id)).length),backgroundColor:'#e67e00',borderRadius:0,borderSkipped:false},
+    {label:t('th_support'),data:MODULES.map(m=>props.filter(p=>p.phase==='support'&&(p.modules||[]).includes(m.id)).length),backgroundColor:'#00b460',borderRadius:0,borderSkipped:false},
+    {label:t('th_done'),data:MODULES.map(m=>props.filter(p=>p.phase==='done'&&(p.modules||[]).includes(m.id)).length),backgroundColor:'#0088cc',borderRadius:0,borderSkipped:false},
+  ],{},{scales:{x:{stacked:true},y:{stacked:true}}});
+}
+
+// ══════ MODAL ══════
+function openAddModal() {
+  el('modalTitle').textContent=t('btn_add').replace('+ ','');
+  el('editPropId').value='';
+  el('fName').value=''; el('fCity').value=''; el('fPhase').value='implementation';
+  el('fDays').value='0'; el('fUnits').value='50';
+  el('fEntryDate').value=new Date().toISOString().split('T')[0];
+  el('fNotes').value='';
+  buildModuleChecks([]);
+  el('propModal').style.display='flex';
+}
+
+function openEditModal(id) {
+  const p=state.properties.find(x=>String(x.id)===String(id)); if(!p) return;
+  el('modalTitle').textContent=lang==='es'?'Editar Propiedad':lang==='en'?'Edit Property':lang==='pt'?'Editar Propriedade':'物件を編集';
+  el('editPropId').value=id;
+  el('fName').value=p.name||''; el('fCity').value=p.city||'';
+  el('fPhase').value=p.phase||'implementation'; el('fDays').value=p.days||0;
+  el('fUnits').value=p.units||0; el('fEntryDate').value=p.entry_date||'';
+  el('fNotes').value=p.notes||'';
+  buildModuleChecks(p.modules||[]);
+  el('propModal').style.display='flex';
+}
+
+function buildModuleChecks(active) {
+  el('modulesChecks').innerHTML=MODULES.map(m=>{
+    const ck=active.includes(m.id);
+    return `<label class="module-check ${ck?'checked':''}" id="mc-${m.id}">
+      <input type="checkbox" value="${m.id}" ${ck?'checked':''} onchange="toggleCheck('${m.id}',this)"/>
+      ${m.icon} ${m.label}
+    </label>`;
+  }).join('');
+}
+
+function toggleCheck(id, inp) {
+  const l=document.getElementById('mc-'+id);
+  inp.checked?l.classList.add('checked'):l.classList.remove('checked');
+}
+
+function closeModal(){ el('propModal').style.display='none'; }
+function closeModalOutside(e){ if(e.target===el('propModal')) closeModal(); }
+
+async function saveProperty() {
+  const name=el('fName').value.trim();
+  if (!name){ showToast(lang==='es'?'El nombre es requerido':'Name is required','error'); return; }
+  const modules=[...document.querySelectorAll('#modulesChecks input:checked')].map(i=>i.value);
+  const prop={name, city:el('fCity').value.trim(), phase:el('fPhase').value,
+    days:parseInt(el('fDays').value)||0, units:parseInt(el('fUnits').value)||0,
+    entry_date:el('fEntryDate').value, notes:el('fNotes').value.trim(), modules};
+  const editId=el('editPropId').value;
+  closeModal();
+  if (editId) {
+    if (sb) { await updateSupabase(editId, prop); await fetchAllData(); }
+    else {
+      const idx=state.properties.findIndex(x=>String(x.id)===String(editId));
+      if (idx>=0) state.properties[idx]={...state.properties[idx],...prop};
+      renderSection('properties');
     }
-    sb=window.supabase.createClient(url,key);
-    const {error}=await sb.from('properties').select('id',{count:'exact',head:true});
-    if(error)throw error;
-    localStorage.setItem('dn_sb_url',url);localStorage.setItem('dn_sb_key',key);
-    document.getElementById('configBanner').style.display='none';
-    showToast(t('connected'),'success');
-    startRealtime();fetchData();
-  }catch(e){showToast('Error: '+e.message,'error');}
-}
-
-async function fetchData(){
-  if(!sb)return;
-  try{
-    const{data:props}=await sb.from('properties').select('*');
-    if(props){
-      ['implementation','pilot','support','done'].forEach((ph,i)=>{
-        data.phases[i].count=props.filter(p=>p.phase===ph).length;
-      });
+  } else {
+    if (sb) { await insertSupabase(prop); await fetchAllData(); }
+    else {
+      state.properties.unshift({...prop, id:'demo-'+Date.now()});
+      renderSection('properties');
     }
-    const{count}=await sb.from('users').select('id',{count:'exact',head:true});
-    if(count!==null)data.users.total=count;
-    data.lastUpdated=new Date();save();renderAll();
-  }catch(e){console.error(e);}
+  }
+  showToast(t('toast_saved'),'success');
 }
 
-function startRealtime(){
-  if(!sb)return;
-  sbChannel=sb.channel('dn-rt')
-    .on('postgres_changes',{event:'*',schema:'public',table:'properties'},()=>{fetchData();showToast(t('refreshed'),'success');})
-    .on('postgres_changes',{event:'*',schema:'public',table:'users'},()=>fetchData())
-    .subscribe();
+async function deleteProp(id) {
+  if (!confirm(lang==='es'?'¿Eliminar esta propiedad?':lang==='en'?'Delete this property?':'Deletar esta propriedade?')) return;
+  if (sb) { await deleteSupabase(id); await fetchAllData(); }
+  else { state.properties=state.properties.filter(x=>String(x.id)!==String(id)); renderPropertiesTable(); renderKPIs(); }
+  showToast(t('toast_deleted'),'success');
 }
 
-// ── DEMO MODE ──────────────────────────────────────────────────────
-function loadDemoData(){
-  document.getElementById('configBanner').style.display='none';
-  // Animate KPIs
-  const targets={kpiTotal:28,kpiImpl:12,kpiPilot:8,kpiSupport:5};
-  Object.entries(targets).forEach(([id,val])=>animateNum(id,0,val,900));
-  animateNum2('totalUsers',0,4287,1200);
-  data.lastUpdated=new Date();save();
-  setTimeout(renderAll,50);
-  showToast(t('demo_mode'),'success');
-  // Simulate live updates
-  setInterval(()=>{
-    const d=Math.floor(Math.random()*7)-3;
-    data.users.total=Math.max(4200,data.users.total+d);
-    data.lastUpdated=new Date();
-    document.getElementById('totalUsers').textContent=data.users.total.toLocaleString();
-    document.getElementById('lastUpdatedText').textContent=data.lastUpdated.toLocaleTimeString();
-    save();
-  },6000);
+// ══════ CHARTS ══════
+function destroyChart(id){ if(charts[id]){try{charts[id].destroy();}catch(e){} delete charts[id];} }
+
+function makeChart(id, type, labels, datasets, extra={}, extraOpts={}) {
+  const canvas=document.getElementById(id); if (!canvas) return;
+  destroyChart(id);
+  const dk=theme==='dark';
+  const gc=dk?'rgba(255,255,255,.06)':'rgba(0,0,0,.05)';
+  const tc=dk?'#9287b8':'#7c6fa0';
+  const tb=dk?'#1e1838':'#fff';
+  const scales=(type==='radar')?{r:{grid:{color:gc},ticks:{color:tc,backdropColor:'transparent',font:{family:'Outfit',size:10}},pointLabels:{color:tc,font:{family:'Outfit',size:10}}}}
+    :(type==='doughnut'||type==='pie')?{}
+    :{x:{grid:{color:gc},ticks:{color:tc,font:{family:'Outfit',size:10}},border:{color:gc}},...(extraOpts.scales?.x?{x:{...extraOpts.scales.x,grid:{color:gc},ticks:{color:tc,font:{family:'Outfit',size:10}}}}:{}),
+       y:{grid:{color:gc},ticks:{color:tc,font:{family:'Outfit',size:10}},border:{color:gc}},...(extraOpts.scales?.y?{y:{...extraOpts.scales.y,grid:{color:gc},ticks:{color:tc,font:{family:'Outfit',size:10}}}}:{})};
+  charts[id]=new Chart(canvas,{type,data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:tc,font:{family:'Outfit',size:11},boxWidth:12}},
+      tooltip:{backgroundColor:tb,titleColor:dk?'#ede9ff':'#16122a',bodyColor:tc,borderColor:dk?'#2d2448':'#e0d9f5',borderWidth:1,titleFont:{family:'Outfit',weight:'700'},bodyFont:{family:'Outfit'}}},
+    scales,...extraOpts,...extra}});
 }
 
-function animateNum(id,from,to,dur){
-  const el=document.getElementById(id);
-  const start=performance.now();
-  (function go(t){
-    const p=Math.min((t-start)/dur,1);
-    el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-p,3)));
-    if(p<1)requestAnimationFrame(go);
-  })(performance.now());
-}
-function animateNum2(id,from,to,dur){
-  const el=document.getElementById(id);
-  const start=performance.now();
-  (function go(t){
-    const p=Math.min((t-start)/dur,1);
-    el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-p,3))).toLocaleString();
-    if(p<1)requestAnimationFrame(go);
-  })(performance.now());
+function renderDashCharts() {
+  const props=state.properties; if (!props.length) return;
+  makeChart('chartPhase','doughnut',Object.values(PHASES).map(c=>c.label),[{data:Object.keys(PHASES).map(k=>props.filter(p=>p.phase===k).length),backgroundColor:Object.values(PHASES).map(c=>c.color),borderWidth:0,hoverOffset:8}]);
+  makeChart('chartModules','bar',MODULES.map(m=>m.label),[{label:t('nav_props'),data:MODULES.map(m=>props.filter(p=>(p.modules||[]).includes(m.id)).length),backgroundColor:Object.values(PHASES).map(c=>c.color).concat(['#F7B500','#00ccaa','#ff6b6b','#aaa']),borderRadius:6,borderSkipped:false}]);
+  const sorted=[...props].sort((a,b)=>(b.modules||[]).length-(a.modules||[]).length);
+  makeChart('chartProps','bar',sorted.map(p=>p.name.length>20?p.name.substring(0,20)+'…':p.name),[{label:lang==='en'?'Progress (%)':'Progreso (%)',data:sorted.map(p=>Math.round(((p.modules||[]).length/MODULES.length)*100)),backgroundColor:sorted.map(p=>PHASES[p.phase]?.color||'#820ad1'),borderRadius:6,borderSkipped:false}],{},{indexAxis:'y'});
 }
 
-function refreshData(){
-  const btn=document.getElementById('refreshBtn');
-  btn.classList.add('spin');
-  if(sb){fetchData().finally(()=>{btn.classList.remove('spin');showToast(t('refreshed'),'success');});}
-  else{setTimeout(()=>{data.lastUpdated=new Date();renderAll();save();btn.classList.remove('spin');showToast(t('refreshed'),'success');},700);}
+function renderChartsPage() {
+  const props=state.properties; if (!props.length) return;
+  makeChart('chartPhase2','doughnut',Object.values(PHASES).map(c=>c.label),[{data:Object.keys(PHASES).map(k=>props.filter(p=>p.phase===k).length),backgroundColor:Object.values(PHASES).map(c=>c.color),borderWidth:0,hoverOffset:8}]);
+  makeChart('chartRadar','radar',MODULES.map(m=>m.label),[{label:lang==='en'?'Properties':'Propiedades',data:MODULES.map(m=>props.filter(p=>(p.modules||[]).includes(m.id)).length),backgroundColor:'rgba(130,10,209,.15)',borderColor:'#820ad1',pointBackgroundColor:'#820ad1',borderWidth:2,pointRadius:4}]);
+  makeChart('chartDays','bar',props.map(p=>p.name.length>16?p.name.substring(0,16)+'…':p.name),[{label:lang==='en'?'Days':'Días',data:props.map(p=>p.days||0),backgroundColor:props.map(p=>PHASES[p.phase]?.color||'#820ad1'),borderRadius:6,borderSkipped:false}]);
+  const sorted=[...props].sort((a,b)=>(b.modules||[]).length-(a.modules||[]).length);
+  makeChart('chartProps2','bar',sorted.map(p=>p.name.length>20?p.name.substring(0,20)+'…':p.name),[{label:'%',data:sorted.map(p=>Math.round(((p.modules||[]).length/MODULES.length)*100)),backgroundColor:sorted.map(p=>PHASES[p.phase]?.color||'#820ad1'),borderRadius:6,borderSkipped:false}],{},{indexAxis:'y'});
 }
 
-// ── TOAST ──────────────────────────────────────────────────────────
-function showToast(msg,type=''){
-  const c=document.getElementById('toastContainer');
-  const el=document.createElement('div');
-  el.className=`toast${type?` toast-${type}`:''}`;
-  el.textContent=msg;c.appendChild(el);
-  setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(40px)';setTimeout(()=>el.remove(),350);},3000);
+// ══════ SETTINGS ══════
+function renderSettings() {
+  const s=settings;
+  el('setAutoRefresh').value=s.autoRefresh||60;
+  el('setUserName').value=s.userName||'';
+  el('setCurWeekStart').value=s.curWeekStart||getLastFriday(-7);
+  el('setPrevWeekStart').value=s.prevWeekStart||getLastFriday(-14);
+  const url=localStorage.getItem('dn_sb_url')||'';
+  el('setShowUrl').textContent=url?url.substring(0,40)+'…':'No configurado';
+  el('setConnStatus').textContent=isConnected?t('connected'):t('not_connected');
+  el('setConnStatus').style.color=isConnected?'#00b460':'#e03030';
+  el('langSel2').value=lang;
+  el('themeBtn2').textContent=theme==='dark'?'☀️ '+( lang==='en'?'Light':'Claro'):'🌙 '+(lang==='en'?'Dark':'Oscuro');
+  renderTargetSettings();
 }
 
-// ── INIT ───────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded',async()=>{
-  if(theme==='dark')document.getElementById('themeBtn').textContent='☀️';
+function renderTargetSettings() {
+  const container=el('targetSettings'); if (!container) return;
+  container.innerHTML=MODULES.map(m=>{
+    return `<div class="setting-row">
+      <div><div class="setting-label">${m.icon} ${m.label}</div><div class="setting-sub">${m.targetLabel}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function autoSetDates() {
+  settings.curWeekStart=getLastFriday(-7);
+  settings.prevWeekStart=getLastFriday(-14);
+  el('setCurWeekStart').value=settings.curWeekStart;
+  el('setPrevWeekStart').value=settings.prevWeekStart;
+  saveSettings();
+  showToast(lang==='es'?'Fechas actualizadas':'Dates updated','success');
+}
+
+function saveSettings() {
+  settings.autoRefresh=parseInt(el('setAutoRefresh').value)||60;
+  settings.userName=(el('setUserName')?el('setUserName').value:'');
+  settings.curWeekStart=(el('setCurWeekStart')?el('setCurWeekStart').value:'');
+  settings.prevWeekStart=(el('setPrevWeekStart')?el('setPrevWeekStart').value:'');
+  localStorage.setItem('dn_settings',JSON.stringify(settings));
+  startAutoRefresh();
+  updateGreeting();
+}
+
+function loadSettings() {
+  const s=localStorage.getItem('dn_settings');
+  if (s) { try { settings={...settings,...JSON.parse(s)}; } catch(e){} }
+}
+
+// ══════ GREETING & CLOCK ══════
+function updateGreeting() {
+  const h=new Date().getHours();
+  let g;
+  if (h>=6 && h<12) g=t('good_morning');
+  else if (h>=12 && h<20) g=t('good_afternoon');
+  else g=t('good_evening');
+  el('greetingLabel').textContent=g;
+  const name=settings.userName||'Admin';
+  el('greetingText').textContent=name;
+}
+
+function updateClock() {
+  const now=new Date();
+  el('topbarClock').textContent=now.toLocaleTimeString(lang==='ja'?'ja-JP':lang==='pt'?'pt-BR':lang==='en'?'en-US':'es-CO');
+  el('sidebarDate').textContent=now.toLocaleDateString(lang==='ja'?'ja-JP':lang==='pt'?'pt-BR':lang==='en'?'en-US':'es-CO',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+  // update greeting every minute
+  if (now.getSeconds()===0) updateGreeting();
+}
+
+// ══════ THEME & LANG ══════
+function toggleTheme() {
+  theme=theme==='light'?'dark':'light';
+  document.body.dataset.theme=theme;
+  localStorage.setItem('dn_theme',theme);
+  el('themeBtn').textContent=theme==='dark'?'☀️':'🌙';
+  if (el('themeBtn2')) el('themeBtn2').textContent=theme==='dark'?'☀️ '+(lang==='en'?'Light':'Claro'):'🌙 '+(lang==='en'?'Dark':'Oscuro');
+  Object.keys(charts).forEach(id=>destroyChart(id));
+  const active=document.querySelector('[id^="sec-"]:not([style*="none"])');
+  if (active) renderSection(active.id.replace('sec-',''));
+}
+
+function setLang(l) {
+  lang=l;
+  localStorage.setItem('dn_lang',l);
+  el('langSel').value=l;
+  if (el('langSel2')) el('langSel2').value=l;
+  applyTranslations();
+  updateGreeting();
+  const active=document.querySelector('[id^="sec-"]:not([style*="none"])');
+  if (active) renderSection(active.id.replace('sec-',''));
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-i]').forEach(el2=>{
+    const k=el2.dataset.i; const v=t(k);
+    if (el2.tagName==='INPUT'||el2.tagName==='BUTTON') el2.value=v;
+    else el2.textContent=v;
+  });
+  // Phase labels in PHASES obj
+  PHASES.implementation.label=t('ph_impl');
+  PHASES.pilot.label=t('ph_pilot');
+  PHASES.support.label=t('ph_support');
+  PHASES.done.label=t('ph_done');
+}
+
+// ══════ REFRESH ══════
+function refreshData() {
+  if (!isConnected && !state.properties.length){ showToast(lang==='es'?'Conecta primero':'Connect first','error'); return; }
+  const btn=el('refreshBtn');
+  btn.style.transition='transform .7s'; btn.style.transform='rotate(360deg)';
+  const p=sb?fetchAllData():Promise.resolve();
+  p.then(()=>{ setTimeout(()=>btn.style.transform='',800); showToast(t('toast_refreshed'),'success'); renderSection('dashboard'); });
+}
+
+// ══════ TOAST ══════
+function showToast(msg, type='') {
+  const c=el('toastContainer'), e=document.createElement('div');
+  e.className='toast'+(type?' toast-'+type:''); e.textContent=msg;
+  c.appendChild(e);
+  setTimeout(()=>{ e.style.opacity='0'; e.style.transform='translateX(36px)'; setTimeout(()=>e.remove(),350); },3000);
+}
+
+function el(id){ return document.getElementById(id); }
+
+// ══════ INIT ══════
+document.addEventListener('DOMContentLoaded', async ()=>{
+  loadSettings();
+  document.body.dataset.theme=theme;
+  el('themeBtn').textContent=theme==='dark'?'☀️':'🌙';
+  el('langSel').value=lang;
+  applyTranslations();
+  updateGreeting();
+  clockTimer=setInterval(updateClock,1000);
+  updateClock();
+  autoSetDates();
+
   const savedUrl=localStorage.getItem('dn_sb_url');
   const savedKey=localStorage.getItem('dn_sb_key');
-  if(savedUrl&&savedKey){document.getElementById('sbUrl').value=savedUrl;document.getElementById('sbKey').value=savedKey;}
-  applyI18n();
-  renderAll();
-  if(savedUrl&&savedKey){
-    try{
-      if(!window.supabase)await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+  if (savedUrl && savedKey) {
+    el('sbUrl').value=savedUrl; el('sbKey').value=savedKey;
+    try {
+      if (!window.supabase) await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js');
       sb=window.supabase.createClient(savedUrl,savedKey);
-      document.getElementById('configBanner').style.display='none';
-      startRealtime();fetchData();
-    }catch(e){}
+      const {error}=await sb.from('properties').select('id',{count:'exact',head:true});
+      if (error) throw error;
+      isConnected=true; setRealtimeBadge(true);
+      el('sec-connect').style.display='none';
+      el('sec-dashboard').style.display='block';
+      await fetchAllData();
+      startRealtime();
+      startAutoRefresh();
+    } catch(e) {
+      localStorage.removeItem('dn_sb_url'); localStorage.removeItem('dn_sb_key');
+    }
   }
 });
 </script>
