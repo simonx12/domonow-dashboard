@@ -952,18 +952,17 @@ function onModuleInput(mid, rawVal){
 
 function toggleModuleCheck(id,inp){
   const numEl=$('mp-num-'+id),row=$('mp-row-'+id),barRow=$('mp-barrow-'+id),badge=$('mp-badge-'+id);
-  const units=parseInt($('fUnits').value)||50;
-  const m=MODULES.find(x=>x.id===id);
+  if(!numEl||!row)return;
   if(inp.checked){
     numEl.disabled=false;
     if(!numEl.value)numEl.value='0';
     row.classList.add('mp-on');
-    barRow.style.display='flex';
+    if(barRow)barRow.style.display='flex';
     onModuleInput(id,numEl.value);
   }else{
     numEl.disabled=true;numEl.value='';
     row.classList.remove('mp-on');
-    barRow.style.display='none';
+    if(barRow)barRow.style.display='none';
     if(badge){badge.textContent='—';badge.className='mp-pct-badge';}
     const bar=$('mp-bar-'+id);if(bar){bar.style.width='0%';}
     const lbl=$('mp-barlbl-'+id);if(lbl)lbl.textContent='—';
@@ -1147,13 +1146,21 @@ function renderSettings(){
   }).join('');
 }
 
-function autoSetDates(){settings.curWeekStart=getLastFriday(-7);settings.prevWeekStart=getLastFriday(-14);$('setCurWeekStart').value=settings.curWeekStart;$('setPrevWeekStart').value=settings.prevWeekStart;saveSettings();showToast('Fechas actualizadas','success');}
+function autoSetDates(){
+  settings.curWeekStart=getLastFriday(-7);
+  settings.prevWeekStart=getLastFriday(-14);
+  const cw=$('setCurWeekStart'),pw=$('setPrevWeekStart');
+  if(cw)cw.value=settings.curWeekStart;
+  if(pw)pw.value=settings.prevWeekStart;
+  saveSettings();
+}
 
 function saveSettings(){
-  settings.autoRefresh=parseInt($('setAutoRefresh').value)||60;
-  settings.userName=$('setUserName')?$('setUserName').value:'';
-  settings.curWeekStart=$('setCurWeekStart')?$('setCurWeekStart').value:'';
-  settings.prevWeekStart=$('setPrevWeekStart')?$('setPrevWeekStart').value:'';
+  const ar=$('setAutoRefresh'),un=$('setUserName'),cw=$('setCurWeekStart'),pw=$('setPrevWeekStart');
+  if(ar)settings.autoRefresh=parseInt(ar.value)||60;
+  if(un)settings.userName=un.value;
+  if(cw)settings.curWeekStart=cw.value;
+  if(pw)settings.prevWeekStart=pw.value;
   localStorage.setItem('dn_settings',JSON.stringify(settings));
   startAutoRefresh();updateGreeting();
 }
