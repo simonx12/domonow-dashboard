@@ -721,8 +721,8 @@ async function fetchAllData(){
   }catch(e){showToast('Error al cargar datos','error');}
 }
 
-async function insertSupabase(prop){if(!sb)return;const{error}=await sb.from('properties').insert({name:prop.name,city:prop.city,phase:prop.phase,days_elapsed:prop.days,units:prop.units,active_modules:prop.modules,module_values:prop.module_values,notes:prop.notes,entry_date:prop.entry_date});if(error)showToast('Error: '+error.message,'error');}
-async function updateSupabase(id,prop){if(!sb)return;const{error}=await sb.from('properties').update({name:prop.name,city:prop.city,phase:prop.phase,days_elapsed:prop.days,units:prop.units,active_modules:prop.modules,module_values:prop.module_values,notes:prop.notes,entry_date:prop.entry_date}).eq('id',id);if(error)showToast('Error: '+error.message,'error');}
+async function insertSupabase(prop){if(!sb)return;const{error}=await sb.from('properties').insert({name:prop.name,city:prop.city,phase:prop.phase,days_elapsed:prop.days,units:prop.units,active_modules:prop.modules,module_values:prop.module_values,notes:prop.notes,entry_date: new Date(prop.entry_date).toISOString()});if(error)showToast('Error: '+error.message,'error');}
+async function updateSupabase(id,prop){if(!sb)return;const{error}=await sb.from('properties').update({name:prop.name,city:prop.city,phase:prop.phase,days_elapsed:prop.days,units:prop.units,active_modules:prop.modules,module_values:prop.module_values,notes:prop.notes,entry_date: new Date(prop.entry_date).toISOString()}).eq('id',id);if(error)showToast('Error: '+error.message,'error');}
 async function deleteSupabase(id){if(!sb)return;const{error}=await sb.from('properties').delete().eq('id',id);if(error)showToast('Error: '+error.message,'error');}
 
 function startRealtime(){if(!sb)return;sbChannel=sb.channel('dn-rt').on('postgres_changes',{event:'*',schema:'public',table:'properties'},()=>fetchAllData()).subscribe(s=>setRealtimeBadge(s==='SUBSCRIBED'));}
